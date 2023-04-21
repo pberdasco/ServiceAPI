@@ -1,0 +1,6 @@
+npm init -y 
+npm i nodemon -D   (al entorno de dev -D)
+npm install express dotenv mysql2
+crear el .gitignore con .node_modules y .env
+para usar inport en lugar de require en package.json "type": "module",
+para ... dentro de scripts "dev": "nodemon app.js"  -> permite "npm run dev"  que arranca con nodemon
