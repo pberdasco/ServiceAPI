@@ -1,20 +1,21 @@
 import { Router } from "express";
 import ProductoController from "../controllers/productos_controller.js";
+import { logRequest } from "../middleware/logRequest.js";
+import { checkJwt } from "../middleware/session.js";
 
-const router = Router()
+export const productoRouter = Router()
 
-router.get('/', ProductoController.getAll);
+productoRouter.get('/', logRequest, checkJwt, ProductoController.getAll);
 
-router.get('/TP/:id', ProductoController.getAllByTipoId);
+productoRouter.get('/TP/:id', ProductoController.getAllByTipoId);
 
-router.get('/:id', ProductoController.getById);
+productoRouter.get('/:id', ProductoController.getById);
 
-router.get('/ERP/:id', ProductoController.getByIdERP);
+productoRouter.get('/ERP/:id', ProductoController.getByIdERP);
 
-router.post('/', ProductoController.create);
+productoRouter.post('/', ProductoController.create);
 
-router.put('/:id', ProductoController.update);
+productoRouter.put('/:id', ProductoController.update);
 
-router.delete('/:id', ProductoController.delete);
+productoRouter.delete('/:id', ProductoController.delete);
 
-export default router;

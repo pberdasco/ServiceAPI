@@ -1,3 +1,4 @@
+import { showError } from "../middleware/controllerErrors.js";
 import ProductoService from "../services/productos_service.js";
 
 export default class ProductoController {
@@ -7,7 +8,8 @@ export default class ProductoController {
             const productos = await ProductoService.getAll();
             res.status(200).send(productos);                  
         } catch (error) {
-            res.status(error?.status || 500).send({message: error?.message || error});     
+            showError(req, res, error);
+            //res.status(error?.status || 500).send({message: error?.message || error});     
         }
     }
 
@@ -20,7 +22,8 @@ export default class ProductoController {
                 const productos = await ProductoService.getAllByTipoId(id);
                 res.status(200).send(productos);                  
             } catch (error) {
-                res.status(error?.status || 500).send({message: error?.message || error});     
+                showError(req, res, error);
+                //res.status(error?.status || 500).send({message: error?.message || error});     
             }
         }
     }
@@ -34,7 +37,8 @@ export default class ProductoController {
                 const producto = await ProductoService.get(id, "id");
                 res.status(200).send(producto.toJson());
             } catch (error){
-                res.status(error?.status || 500).send({message: error?.message || error});
+                showError(req, res, error);
+                //res.status(error?.status || 500).send({message: error?.message || error});
             }
         } 
     }
@@ -45,7 +49,8 @@ export default class ProductoController {
             const producto = await ProductoService.get(id, "idERP");
             res.status(200).send(producto.toJson());
         } catch (error){
-            res.status(error?.status || 500).send({message: error?.message || error});
+            showError(req, res, error);
+            //res.status(error?.status || 500).send({message: error?.message || error});
         }
     }
 
@@ -58,7 +63,8 @@ export default class ProductoController {
                 const insertado = await ProductoService.create(nuevoProducto);
                 res.status(200).send(insertado.toJson());
             } catch (error){
-                res.status(error?.status || 500).send({message: error?.message || error});
+                showError(req, res, error);
+                //res.status(error?.status || 500).send({message: error?.message || error});
             }
         }else{
             const error = {message: "Problemas con el req.body", fields: errores}
@@ -72,7 +78,8 @@ export default class ProductoController {
             const ok = await ProductoService.delete(id);
             res.status(204).send("Ok")
         } catch (error){
-            res.status(error?.status || 500).send({message: error?.message || error});
+            showError(req, res, error);
+            //res.status(error?.status || 500).send({message: error?.message || error});
         }
     }
 
@@ -85,7 +92,8 @@ export default class ProductoController {
                 const productoActualizado = await ProductoService.update(id, producto);
                 res.status(200).send(productoActualizado.toJson());
             } catch (error){
-                res.status(error?.status || 500).send({message: error?.message || error});
+                showError(req, res, error);
+                //res.status(error?.status || 500).send({message: error?.message || error});
             }
         }else{
             const error = {message: "Problemas con el req.body", fields: errores}

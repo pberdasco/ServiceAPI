@@ -9,5 +9,7 @@ export default {
         PASSWORD: process.env.DB_PASSWORD,
         DATABASE: process.env.DB_DATABASE,
         PORT: process.env.DB_PORT
-    }
+    },
+    LOGREQUEST: process.env.LOG_REQUEST,
+    LOGERRORS: process.env.LOG_ERRORS
 }
