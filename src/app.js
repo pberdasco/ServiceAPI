@@ -4,6 +4,7 @@ import cors from "cors";
 
 import {productoRouter} from "./routers/productos_router.js";
 import {casoRouter} from "./routers/casos_routers.js";
+import {authRouter} from "./routers/auth_routers.js";
 import ping from "./routers/index_router.js";
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(cors()); // cors debe ir antes de los routers
 app.use(ping); // para test en /ping 
 app.use("/casos", casoRouter);
 app.use("/productos", productoRouter);
+app.use("/auth", authRouter);
 
 app.use((req, res, next) => res.status(404).json({message: "no existe el endpoint"}));
 

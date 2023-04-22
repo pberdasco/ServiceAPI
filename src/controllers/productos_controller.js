@@ -8,8 +8,7 @@ export default class ProductoController {
             const productos = await ProductoService.getAll();
             res.status(200).send(productos);                  
         } catch (error) {
-            showError(req, res, error);
-            //res.status(error?.status || 500).send({message: error?.message || error});     
+            showError(req, res, error);    
         }
     }
 
@@ -22,8 +21,7 @@ export default class ProductoController {
                 const productos = await ProductoService.getAllByTipoId(id);
                 res.status(200).send(productos);                  
             } catch (error) {
-                showError(req, res, error);
-                //res.status(error?.status || 500).send({message: error?.message || error});     
+                showError(req, res, error);    
             }
         }
     }
@@ -38,7 +36,6 @@ export default class ProductoController {
                 res.status(200).send(producto.toJson());
             } catch (error){
                 showError(req, res, error);
-                //res.status(error?.status || 500).send({message: error?.message || error});
             }
         } 
     }
@@ -50,7 +47,6 @@ export default class ProductoController {
             res.status(200).send(producto.toJson());
         } catch (error){
             showError(req, res, error);
-            //res.status(error?.status || 500).send({message: error?.message || error});
         }
     }
 
@@ -64,7 +60,6 @@ export default class ProductoController {
                 res.status(200).send(insertado.toJson());
             } catch (error){
                 showError(req, res, error);
-                //res.status(error?.status || 500).send({message: error?.message || error});
             }
         }else{
             const error = {message: "Problemas con el req.body", fields: errores}
@@ -79,7 +74,6 @@ export default class ProductoController {
             res.status(204).send("Ok")
         } catch (error){
             showError(req, res, error);
-            //res.status(error?.status || 500).send({message: error?.message || error});
         }
     }
 
@@ -93,7 +87,6 @@ export default class ProductoController {
                 res.status(200).send(productoActualizado.toJson());
             } catch (error){
                 showError(req, res, error);
-                //res.status(error?.status || 500).send({message: error?.message || error});
             }
         }else{
             const error = {message: "Problemas con el req.body", fields: errores}

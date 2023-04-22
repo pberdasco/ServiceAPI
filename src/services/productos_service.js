@@ -24,9 +24,14 @@ export default class ProductoService{
 
     static async create(producto) {
             const productoToAdd = Producto.toAdd(producto);
-            const [rows] = await pool.query("INSERT INTO Productos SET ?", [productoToAdd]); 
-            productoToAdd.id = rows.insertId;
-            return new Producto(productoToAdd);                          
+            try{
+                const [rows] = await pool.query("INSERT INTO Productos SET ?", [productoToAdd]); 
+                productoToAdd.id = rows.insertId;
+                return new Producto(productoToAdd);
+            }catch(error){
+                if (error?.code === "ER_DUP_ENTRY") dbErrorMsg(409, "El producto ya existe");
+                dbErrorMsg(500, error?.sqlMessage);
+            }                          
     }
 
     static async delete(id) {
