@@ -1,5 +1,6 @@
 import { pool, dbErrorMsg } from "../database/db.js";
-import Usuarios from "../models/usuarios_model.js"
+import Usuarios from "../models/usuarios_model.js";
+import JWT from "../middleware/jwt_handle.js";
 
 export default class AuthService{
     static async userRegister(user){
@@ -14,7 +15,19 @@ export default class AuthService{
         } 
     }
 
-    static async userLogin(){
+    static async userLogin(mail, pass){
+        try{
+            const [rows] = await pool.query("SELECT * FROM Usuarios WHERE mail = ?", [mail]);
+            if (rows.length === 0) dbErrorMsg(401, "Credenciales Invalidas");
 
+            const isOk = await Usuarios.validaPassword(pass, rows[0]);
+            if (!isOk) dbErrorMsg(401, "Credenciales Invalidas");
+
+            const user = new Usuarios(rows[0]);
+            return {token: JWT.generateToken(rows[0].mail), user: user.toJson()};  // aca podria mandar un payload mayor.
+        }catch(error){
+            if (error.status === 401) throw error;
+            dbErrorMsg(500, error?.sqlMessage);
+        }
     }
 }

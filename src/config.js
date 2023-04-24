@@ -1,6 +1,7 @@
 import { config } from 'dotenv';
 config();
 
+//atención si las variables estuvieran definidas en .env con = en lugar de : aqui habria que usar = también 
 export default {
     PORT: process.env.PORT,
     DB: {
@@ -11,5 +12,6 @@ export default {
         PORT: process.env.DB_PORT
     },
     LOGREQUEST: process.env.LOG_REQUEST,
-    LOGERRORS: process.env.LOG_ERRORS
+    LOGERRORS: process.env.LOG_ERRORS,
+    JWT_SECRET: process.env.JWT_SECRET
 }

@@ -8,7 +8,6 @@ import config from "../config.js";
 *  En un middleware como este podriamos contar tambien llamadas, seguridad, etc
 */
 export function logRequest(req, res, next){
-    console.log(config.LOGREQUEST)
     if (config.LOGREQUEST === "1"){
         const expressReq = {
             time: new Date(),

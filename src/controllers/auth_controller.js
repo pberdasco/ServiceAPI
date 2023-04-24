@@ -3,12 +3,11 @@ import AuthService from "../services/auth_service.js";
 
 export default class AuthController{
     static async userRegister(req, res, next) {
-        const user = req.body;   //user: {nombre, email, password} 
+        const {nombre, mail, password} = req.body;   
         try{
-            const insertado = await AuthService.userRegister(user);
-            res.status(200).send(insertado.toJson());
+            const usuario = await AuthService.userRegister({nombre, mail, password});
+            res.status(200).send(usuario.toJson());
         } catch (error){
-            // ver si capturo especialmente el "ya existe"
             showError(req, res, error);
         }
         
@@ -16,7 +15,13 @@ export default class AuthController{
     }
 
     static async userLogin(req, res, next) {
-        res.send("Login de usuario");
+        const {mail, password} = req.body;  
+        try {
+            const data = await AuthService.userLogin(mail, password);
+            res.status(200).send(data);                  
+        } catch (error) {
+            showError(req, res, error);    
+        }
     }
 }
 
