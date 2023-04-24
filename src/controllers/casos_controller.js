@@ -57,23 +57,13 @@ export default class CasoController {
         }
     }
 
-    static async delete(req, res, next) {
-        const id = req.params.id;
-        try{
-            const ok = await CasoService.delete(id);
-            res.status(204).send("Ok")
-        } catch (error){
-            res.status(error?.status || 500).send({message: error?.message || error});
-        }
-    }
-
-    static async update(req, res, next) {
+    static async updateCabecera(req, res, next) {
         const id = req.params.id;
         const caso = req.body;
         const errores = CasoController.bodyValidations(caso, "update")
         if (errores.length === 0){
             try{
-                const casoActualizado = await CasoService.update(id, caso);
+                const casoActualizado = await CasoService.updateCabecera(id, caso);
                 res.status(200).send(casoActualizado.toJson());
             } catch (error){
                 res.status(error?.status || 500).send({message: error?.message || error});
@@ -84,6 +74,52 @@ export default class CasoController {
         }
     }
 
+    // static async delete(req, res, next) {
+    //     const id = req.params.id;
+    //     try{
+    //         const ok = await CasoService.delete(id);
+    //         res.status(204).send("Ok")
+    //     } catch (error){
+    //         res.status(error?.status || 500).send({message: error?.message || error});
+    //     }
+    // }
+
+
+    // ====================================================================================
+    //     Items
+    static async getItemById(req, res, next) {
+        const id = req.params.id;
+        if(isNaN(id))
+            res.status(400).send({message: "El id debe ser numerico"});
+        else{
+            try{
+                const casoItem = await CasoService.getItemById(id);
+                res.status(200).send(casoItem.toJson());
+            } catch (error){
+                showError(req, res, error);
+            }
+        } 
+    }
+
+    static async updateItem(req, res, next) {
+        const id = req.params.id;
+        const casoItem = req.body;
+        const errores = CasoController.bodyValidations("caso", "updateItem")
+        if (errores.length === 0){
+            try{
+                const casoItemActualizado = await CasoService.updateItem(id, casoItem);
+                res.status(200).send(casoItemActualizado.toJson());
+            } catch (error){
+                res.status(error?.status || 500).send({message: error?.message || error});
+            }
+        }else{
+            const error = {message: "Problemas con el req.body", fields: errores}
+            res.status(400).send(error)
+        }
+    }
+
+
+    // ====================================================================================
     static bodyValidations(record, method){
         const errores = [];
         return errores;

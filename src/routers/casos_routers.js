@@ -6,6 +6,10 @@ export const casoRouter = Router();
 casoRouter.get('/', CasoController.getAll);
 casoRouter.get('/:id', CasoController.getById);
 casoRouter.post('/', CasoController.create);
+casoRouter.put('/:id', CasoController.updateCabecera);
+
+casoRouter.get('/Item/:id', CasoController.getItemById);
+casoRouter.put('/Item/:id', CasoController.updateItem);
 
 
 /* Proximos:
