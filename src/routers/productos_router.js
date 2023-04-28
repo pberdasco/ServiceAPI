@@ -5,7 +5,8 @@ import { checkJwt } from "../middleware/session.js";
 
 export const productoRouter = Router()
 
-productoRouter.get('/', logRequest, checkJwt, ProductoController.getAll);
+productoRouter.get('/', logRequest, ProductoController.getAll);
+// productoRouter.get('/', logRequest, checkJwt, ProductoController.getAll);
 
 productoRouter.get('/TP/:id', ProductoController.getAllByTipoId);
 

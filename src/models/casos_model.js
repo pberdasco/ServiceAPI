@@ -4,7 +4,7 @@ import CasoItem from "./casos_items_model.js";
 export default class Caso{
     id;                     // int
     // codigo;                 // string(8)  => eliminado ver si en algun momento se pone en el objeto pero no en la base
-    clienteId;              // int
+    cliente;                // {id, nombre, apellido, mail, empresa, tipoDoc, documento. idERP, idCRM}
     fechaAlta;              // date
     fechaInicio;            // date
     fechaFin                // date
@@ -20,7 +20,15 @@ export default class Caso{
 
     constructor(cabecera, items){
         this.id = cabecera.id;
-        this.clienteId = cabecera.clienteId;  
+        this.cliente = {};
+        this.cliente.id = cabecera.clienteId;  
+        this.cliente.nombre = cabecera.cliNombre;
+        this.cliente.apellido = cabecera.cliApellido;
+        this.cliente.mail = cabecera.cliMail;
+        this.cliente.empresa = cabecera.cliEmpresa;
+        this.cliente.tipoDoc = cabecera.cliTipoDoc;
+        this.cliente.documento = cabecera.cliDocumento;
+        this.cliente.idERP = cabecera.cliIdERP;
         this.fechaAlta = cabecera.fechaAlta;
         this.fechaInicio = cabecera.fechaInicio;  
         this.fechaFin = cabecera.fechaFin;         
@@ -45,7 +53,7 @@ export default class Caso{
     toJson() {
         return {   
             id: this.id,
-            clienteId: this.clienteId,
+            cliente: this.cliente,
             fechaAlta: this.fechaAlta,
             fechaInicio: this.fechaInicio,
             fechaFin: this.fechaFin,
@@ -72,10 +80,17 @@ export default class Caso{
         function extraeCaso(row){
             return {
                 id: row.casoId,
-                clienteId: row.clienteId,  
-                fechaAlta: row.fechaAlta,
-                fechaInicio: row.fechaInicio,  
-                fechaFin: row.fechaFin,         
+                clienteId: row.clienteId,
+                cliNombre: row.nombre,
+                cliApellido: row.apellido,
+                cliMail: row.mail,
+                cliEmpresa: row.empresa,
+                cliTipoDoc: row.tipoDoc,
+                cliDocumento: row.documento,
+                cliIdERP: row.idERP,  
+                fechaAlta: row.fechaAlta?.toISOString().slice(0, 10) || null,
+                fechaInicio: row.fechaInicio?.toISOString().slice(0, 10) || null,  
+                fechaFin: row.fechaFin?.toISOString().slice(0, 10) || null,         
                 statusDatosID: row.statusDatosID,
                 estadoID: row.cabEstadoID,
                 retiro: row.retiro,
@@ -102,7 +117,7 @@ export default class Caso{
                 color: row.color,         
                 serie: row.serie,              
                 nroFactura: row.nroFactura,         
-                fechaFactura: row.fechaFactura,       
+                fechaFactura: row.fechaFactura?.toISOString().slice(0, 10) || null,     
                 estadoID: row.itemEstadoID,        
                 fallaCliente : row.fallaCliente,       
                 fallaStdId : row.fallaStdId,       
@@ -134,7 +149,7 @@ export default class Caso{
     // deben ser los datos de la base de datos menos el id
     static cabeceraToAdd(caso){
         return {
-            clienteId: caso.clienteId,  
+            clienteId: caso.cliente.id,  
             fechaAlta: caso.fechaAlta.substr(0, 10) || null,
             fechaInicio: caso.fechaInicio.substr(0, 10) || null,  
             fechaFin: caso.fechaFin.substr(0, 10) || null,         

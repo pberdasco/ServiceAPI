@@ -5,9 +5,10 @@ import CasoItem from "../models/casos_items_model.js";
 const selectJoin = "SELECT c.id as casoId, c.clienteId, c.fechaAlta, c.fechaInicio, c.fechaFin, c.statusDatosID, c.estadoID as cabEstadoID, c.retiro, " +
                    "c.opcionRetiroId, c.idCRM, c.dirCalle, c.dirNumero, c.dirProvinciaId, p.nombre as dirProvincia, c.dirLocalidad, c.dirCodigoPostal, c.fotoDestruccionLink, c.tipoCaso, " +
                    " i.id as itemId, i.fila, i.tipoProductoId, i.productoId, i.color, i.serie, i.nroFactura, i.fechaFactura, " + 
-                   "i.estadoID as itemEstadoID, i.fallaCliente, i.fallaStdId, i.causa" +
+                   "i.estadoID as itemEstadoID, i.fallaCliente, i.fallaStdId, i.causa, cl.nombre, cl.apellido, cl.mail, cl.empresa, cl.tipoDoc, cl.documento, cl.idERP " +
                    " FROM Casos_Cabecera c INNER JOIN Casos_Items i ON c.id = i.casoId" +
-                   " INNER JOIN Provincias p ON c.dirProvinciaId = p.id ";
+                   " INNER JOIN Provincias p ON c.dirProvinciaId = p.id " +
+                   "INNER JOIN Clientes cl ON c.clienteId = cl.id";
 
 
 
@@ -59,7 +60,7 @@ export default class CasoService{
         return CasoService.getById(id);
     }
 
-/*
+/*  //En principio no vamos a borrar casos...
     static async delete(id) {
         const [rows] = await pool.query("DELETE FROM Casos WHERE id = ?", [id]);
         if (rows.affectedRows != 1) dbErrorMsg(404, "El caso no existe");
@@ -85,13 +86,33 @@ export default class CasoService{
         return CasoService.getItemById(id);
     }
 
-    static async updateHistoria(tipo, elementoOriginal, partsOfElemento){
-        return;
-    }
+    
 
 
     // -=====================================================================================
     //          Historias
+
+    // static async createHistoria(tipo, elementoOriginal, partsOfElemento){
+    //     const elementoId = (tipo === "Caso") 
+
+    //     for (i = 0; i < partsOfElemento.length; i++){
+    //         const historiaToAdd = {
+    //             usuarioId: 1,
+    //             elementoId: elementoOriginal.id,
+    //             fecha: new Date.toISOString(),
+    //             campo: partsOfElemento[i].
+    //             valorViejo,
+    //             valorNuevo};
+            
+    //         const [rows] = await pool.query("INSERT INTO  Historia_Casos_${tipo} SET ?", [productoToAdd]); 
+    //         productoToAdd.id = rows.insertId;
+    //     }
+
+    //     const historias = await this.getHistoriaCaso(elementoOriginal.id);
+    //     return historias;
+    // }                
+
+
     static async getHistoriaCaso(casoId) {
         const [rows] = await pool.query("SELECT * FROM Historia_Casos_Cabecera WHERE id = ?", [casoId]);
         if (rows.length === 0) dbErrorMsg(404, "No hay historia de cambios para el caso");
@@ -101,7 +122,7 @@ export default class CasoService{
     static async getHistoriaItem(itemId) {
         const [rows] = await pool.query("SELECT * FROM Historia_Casos_Items WHERE id = ?", [itemId]);
         if (rows.length === 0) dbErrorMsg(404, "No hay historia de cambios para el item");
-        return new Historia("Caso", rows);
+        return new Historia("Item", rows);
     }
 
 }
