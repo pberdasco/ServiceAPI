@@ -13,5 +13,9 @@ export default {
     },
     LOGREQUEST: process.env.LOG_REQUEST,
     LOGERRORS: process.env.LOG_ERRORS,
-    JWT_SECRET: process.env.JWT_SECRET
+    JWT_SECRET: process.env.JWT_SECRET,
+    UPLOAD: {
+        IMAGES: process.env.UPLOAD_IMAGES,
+        FILES: process.env.UPLOAD_FILES,
+    }
 }
