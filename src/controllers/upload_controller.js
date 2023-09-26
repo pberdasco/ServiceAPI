@@ -1,8 +1,7 @@
 import { showError } from "../middleware/controllerErrors.js";
 import config from '../config.js';
 import multer from "multer";
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { join } from 'path';
 import fs from "fs";
 
 export default class UploadController {
@@ -43,10 +42,11 @@ export default class UploadController {
             console.log("Archivo cargado ", filePath, uploadedFile.filename);
     
             // Devuelve información sobre el archivo cargado
-            res.json({
+            res.status(200).json({
                 originalname: uploadedFile.originalname,
                 filename: uploadedFile.filename,
                 path: filePath,
+                message: "Archivo cargado con éxito"
             });
         })
 
@@ -70,7 +70,11 @@ export default class UploadController {
                 res.status(500).send('Error al guardar la imagen');
               } else {
                 console.log('Imagen guardada con éxito en', uploadFileName);
-                res.status(200).send('Imagen guardada con éxito');
+                res.status(200).json({
+                    filename: FileName,
+                    path: uploadFileName,
+                    message: "Imagen guardada con éxito"
+                })
               }
             });
           } catch (error) {

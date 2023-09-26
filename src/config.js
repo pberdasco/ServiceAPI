@@ -17,5 +17,10 @@ export default {
     UPLOAD: {
         IMAGES: process.env.UPLOAD_IMAGES,
         FILES: process.env.UPLOAD_FILES,
+    },
+    EXCEL: {
+        DIR: process.env.EXCELS_DIR,
+        FIRSTFIELD: process.env.EXCELS_FIRST_FIELD
     }
+    
 }
