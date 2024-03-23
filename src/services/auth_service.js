@@ -30,4 +30,20 @@ export default class AuthService{
             dbErrorMsg(500, error?.sqlMessage);
         }
     }
+
+    static async getAll() {
+        try{
+            const [rows] = await pool.query("SELECT id, nombre, mail, clienteId FROM Usuarios");
+            return rows;
+        }catch(error){
+            dbErrorMsg(500, error?.sqlMessage);
+        }       
+    }
+
+    static async delete(id) {
+        //Quizas hay que implementar marca de deshabilitado en lugar de borrar
+        const [rows] = await pool.query("DELETE FROM Usuarios WHERE id = ?", [id]);
+        if (rows.affectedRows != 1) dbErrorMsg(404, "El Usuario no existe");
+        return true;
+    }
 }

@@ -10,8 +10,6 @@ export default class AuthController{
         } catch (error){
             showError(req, res, error);
         }
-        
-
     }
 
     static async userLogin(req, res, next) {
@@ -23,4 +21,24 @@ export default class AuthController{
             showError(req, res, error);    
         }
     }
+
+    static async getAll(req, res, next) {
+        try {
+            const usuarios = await AuthService.getAll();
+            res.status(200).send(usuarios);                  
+        } catch (error) {
+            showError(req, res, error);    
+        }
+    }
+
+    static async delete(req, res, next) {
+        const id = req.params.id;
+        try{
+            const ok = await AuthService.delete(id);
+            res.status(204).send("Ok")
+        } catch (error){
+            showError(req, res, error);
+        }
+    }
+
 }
