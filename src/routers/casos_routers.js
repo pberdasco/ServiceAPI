@@ -1,15 +1,18 @@
 import { Router } from "express";
 import CasoController from "../controllers/casos_controller.js";
+//import { logRequest } from "../middleware/logRequest.js";
+//import { checkJwt } from "../middleware/session.js";
 
 export const casoRouter = Router();
 
-casoRouter.get('/', CasoController.getAll);
-casoRouter.get('/:id', CasoController.getById);
-casoRouter.post('/', CasoController.create);
-casoRouter.put('/:id', CasoController.updateCabecera);
+casoRouter.get("/", CasoController.getAll);
+casoRouter.get("/:id", CasoController.getById);
+casoRouter.post("/", CasoController.create);
+// casoRouter.post('/', logRequest, checkJwt, CasoController.create);
+casoRouter.put("/:id", CasoController.updateCabecera);
 
-casoRouter.get('/Item/:id', CasoController.getItemById);
-casoRouter.put('/Item/:id', CasoController.updateItem);
+casoRouter.get("/Item/:id", CasoController.getItemById);
+casoRouter.put("/Item/:id", CasoController.updateItem);
 
 
 /* Proximos:

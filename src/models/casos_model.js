@@ -7,16 +7,16 @@ export default class Caso{
     cliente;                // {id, nombre, apellido, mail, empresa, tipoDoc, documento. idERP, idCRM}
     fechaAlta;              // date
     fechaInicio;            // date
-    fechaFin                // date
-    statusDatosID           // int
-    estadoID                // int
-    retiro                  // int
-    opcionRetiroId          // int
-    idCRM                   // string(10)
+    fechaFin;                // date
+    statusDatosID;           // int
+    estadoID;                // int
+    retiro;                  // int
+    opcionRetiroId;          // int
+    idCRM;                   // string(10)
     direccion = new Direccion();
-    fotoDestruccionLink     // string(45)
-    tipoCaso                // string(1)
-    items = []              // CasoItems collection
+    fotoDestruccionLink;     // string(45)
+    tipoCaso;                // string(1)
+    items = [];              // CasoItems collection
 
     constructor(cabecera, items){
         this.id = cabecera.id;
@@ -42,7 +42,7 @@ export default class Caso{
         this.direccion.provinciaId = cabecera.dirProvinciaId;
         this.direccion.provincia = cabecera.dirProvincia;
         this.direccion.localidad = cabecera.dirLocalidad;
-        this.direccion.codigoPostal = cabecera.dirCodigoPostal
+        this.direccion.codigoPostal = cabecera.dirCodigoPostal;
         this.fotoDestruccionLink = cabecera.fotoDestruccionLink;
         this.tipoCaso = cabecera.tipoCaso;     
         items.forEach((i) => {
@@ -66,8 +66,8 @@ export default class Caso{
             fotoDestruccionLink: this.fotoDestruccionLink,
             tipoCaso: this.tipoCaso,
             items: this.items.map((i) => i.toJson()),
-        }
-    };
+        };
+    }
     
     static newFromSelect(rowsCaso){
         const items = [];
@@ -104,7 +104,7 @@ export default class Caso{
                 dirCodigoPostal: row.dirCodigoPostal,
                 fotoDestruccionLink: row.fotoDestruccionLink,
                 tipoCaso: row.tipoCaso,
-            }
+            };
         }
 
         function extraeItem(row){
@@ -122,7 +122,7 @@ export default class Caso{
                 fallaCliente : row.fallaCliente,       
                 fallaStdId : row.fallaStdId,       
                 causa: row.causa,
-            }
+            };
         }
     }
 
@@ -140,7 +140,7 @@ export default class Caso{
                 caso.push(x);
                 ultimoCasoId = x.casoId;
             }
-        })
+        });
         casos.push(Caso.newFromSelect(caso));
         return casos;
     }
@@ -148,11 +148,12 @@ export default class Caso{
     //asegura que cualquier otro campo (sobretodo id y tipoProducto) que venga en la api no se tenga en cuenta
     // deben ser los datos de la base de datos menos el id
     static cabeceraToAdd(caso){
+        console.log(caso);
         return {
-            clienteId: caso.cliente.id,  
+            clienteId: caso.clienteId,  
             fechaAlta: caso.fechaAlta.substr(0, 10) || null,
-            fechaInicio: caso.fechaInicio.substr(0, 10) || null,  
-            fechaFin: caso.fechaFin.substr(0, 10) || null,         
+            fechaInicio: caso.fechaInicio?.substr(0, 10) || null,  
+            fechaFin: caso.fechaFin?.substr(0, 10) || null,         
             statusDatosID: caso.statusDatosID,
             estadoID: caso.estadoID,
             retiro: caso.retiro,
@@ -165,24 +166,24 @@ export default class Caso{
             dirCodigoPostal: caso.dirCodigoPostal,
             fotoDestruccionLink: caso.fotoDestruccionLink,
             tipoCaso:caso.tipoCaso,     
-        }
+        };
     }
     static itemsToAdd(caso){
         const items = [];
         caso.items.forEach((x) => {
             items.push({
-                    casoId: x.casoId,             
-                    fila: x.fila,               
-                    tipoProductoId: x.tipoProductoId,     
-                    productoId: x.productoId,          
-                    color: x.color,              
-                    serie: x.serie,              
-                    nroFactura: x.nroFactura,         
-                    fechaFactura: x.fechaFactura.substr(0, 10) || null,       
-                    estadoID: x.estadoID,           
-                    fallaCliente: x.fallaCliente,       
-                    fallaStdId: x.fallaStdId,         
-                    causa: x.causa})   
+                casoId: x.casoId,             
+                fila: x.fila,               
+                tipoProductoId: x.tipoProductoId,     
+                productoId: x.productoId,          
+                color: x.color,              
+                serie: x.serie,              
+                nroFactura: x.nroFactura,         
+                fechaFactura: x.fechaFactura.substr(0, 10) || null,       
+                estadoID: x.estadoID,           
+                fallaCliente: x.fallaCliente,       
+                fallaStdId: x.fallaStdId,         
+                causa: x.causa});   
                                 
         });
         return items;

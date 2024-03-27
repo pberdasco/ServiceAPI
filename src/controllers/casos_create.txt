@@ -1,0 +1,64 @@
+Ejemplos de Body para casos create
+Ejemplo 1
+{
+    "id": 3,
+    "clienteId": 5,
+    "fechaAlta": "2022-11-12T03:00:00.000Z",
+    "fechaInicio": "2022-11-13T03:00:00.000Z",
+    "fechaFin": "2022-11-13T03:00:00.000Z",
+    "statusDatosID": 1,
+    "estadoID": 8,
+    "retiro": 0,
+    "opcionRetiroId": 3,
+    "idCRM": "",
+    "dirCalle": "Valentin Gomez",
+    "dirNumero": "2813",
+    "dirProvinciaId": 1,
+    "dirLocalidad": "CABA",
+    "dirCodigoPostal": "1191",
+    "fotoDestruccionLink": "",
+    "tipoCaso": "R",
+    "items": [
+      {
+        "id": 6,
+        "casoId": 3,
+        "fila": 1,
+        "tipoProductoId": 1,
+        "color": "Blanco",
+        "serie": "PQR678",
+        "nroFactura": "FC 0001-00000003",
+        "fechaFactura": "2022-10-24T03:00:00.000Z",
+        "estadoID": 14,
+        "fallaCliente": "Parece que el ruleman perdio la mitad de las bolillas",
+        "fallaStdId": 3,
+        "causa": "Sin causa aparente",
+        "productoId": 2
+      },
+      {
+        "id": 7,
+        "casoId": 3,
+        "fila": 2,
+        "tipoProductoId": 5,
+        "color": "Verde",
+        "serie": "GHP789",
+        "nroFactura": "FC 0003-0000027",
+        "fechaFactura": "2022-11-15T03:00:00.000Z",
+        "estadoID": 14,
+        "fallaCliente": "tira aceite",
+        "fallaStdId": 1,
+        "causa": "Sin causa aparente",
+        "productoId": 15
+      }
+    ]
+  }
+
+Ejemploo 2
+  {
+    "clienteId": 5,
+    "fechaAlta": "2022-11-12T03:00:00.000Z",
+    "statusDatosID": 1,
+    "estadoID": 1,
+    "idCRM": "20",
+    "dirProvinciaId": 1,
+    "items": []  
+  }

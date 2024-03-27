@@ -1,12 +1,12 @@
 import { pool, dbErrorMsg } from "../database/db.js";
-import Caso from "../models/casos_model.js"
+import Caso from "../models/casos_model.js";
 import CasoItem from "../models/casos_items_model.js";
 
 const selectJoin = "SELECT c.id as casoId, c.clienteId, c.fechaAlta, c.fechaInicio, c.fechaFin, c.statusDatosID, c.estadoID as cabEstadoID, c.retiro, " +
                    "c.opcionRetiroId, c.idCRM, c.dirCalle, c.dirNumero, c.dirProvinciaId, p.nombre as dirProvincia, c.dirLocalidad, c.dirCodigoPostal, c.fotoDestruccionLink, c.tipoCaso, " +
                    " i.id as itemId, i.fila, i.tipoProductoId, i.productoId, i.color, i.serie, i.nroFactura, i.fechaFactura, " + 
                    "i.estadoID as itemEstadoID, i.fallaCliente, i.fallaStdId, i.causa, cl.nombre, cl.apellido, cl.mail, cl.empresa, cl.tipoDoc, cl.documento, cl.idERP " +
-                   " FROM Casos_Cabecera c INNER JOIN Casos_Items i ON c.id = i.casoId" +
+                   " FROM Casos_Cabecera c LEFT JOIN Casos_Items i ON c.id = i.casoId" +
                    " INNER JOIN Provincias p ON c.dirProvinciaId = p.id " +
                    "INNER JOIN Clientes cl ON c.clienteId = cl.id";
 
@@ -39,8 +39,8 @@ export default class CasoService{
 
             const itemsToAdd = Caso.itemsToAdd(caso);
             for (let i=0; i < itemsToAdd.length; i++){
-                itemsToAdd[i].casoId = casoToAdd.id;
-                const [rows] = await conn.query("INSERT INTO Casos_Items SET ?", [itemsToAdd[i]]);
+                itemsToAdd[i].casoId = casoToAdd.id;  //asigno la FK de la cabecera a cada item
+                await conn.query("INSERT INTO Casos_Items SET ?", [itemsToAdd[i]]); //podria asignar a const [rows] y verificar si llega insertedId
             }
 
             await conn.commit();
@@ -60,13 +60,13 @@ export default class CasoService{
         return CasoService.getById(id);
     }
 
-/*  //En principio no vamos a borrar casos...
-    static async delete(id) {
-        const [rows] = await pool.query("DELETE FROM Casos WHERE id = ?", [id]);
-        if (rows.affectedRows != 1) dbErrorMsg(404, "El caso no existe");
-        return true;
-    }
-*/
+    /*  //En principio no vamos a borrar casos...
+        static async delete(id) {
+            const [rows] = await pool.query("DELETE FROM Casos WHERE id = ?", [id]);
+            if (rows.affectedRows != 1) dbErrorMsg(404, "El caso no existe");
+            return true;
+        }
+    */
 
 
     // ====================================================================================
@@ -113,16 +113,16 @@ export default class CasoService{
     // }                
 
 
-    static async getHistoriaCaso(casoId) {
-        const [rows] = await pool.query("SELECT * FROM Historia_Casos_Cabecera WHERE id = ?", [casoId]);
-        if (rows.length === 0) dbErrorMsg(404, "No hay historia de cambios para el caso");
-        return new Historia("Caso", rows);
-    }
+    // static async getHistoriaCaso(casoId) {
+    //     const [rows] = await pool.query("SELECT * FROM Historia_Casos_Cabecera WHERE id = ?", [casoId]);
+    //     if (rows.length === 0) dbErrorMsg(404, "No hay historia de cambios para el caso");
+    //     return new Historia("Caso", rows);
+    // }
 
-    static async getHistoriaItem(itemId) {
-        const [rows] = await pool.query("SELECT * FROM Historia_Casos_Items WHERE id = ?", [itemId]);
-        if (rows.length === 0) dbErrorMsg(404, "No hay historia de cambios para el item");
-        return new Historia("Item", rows);
-    }
+    // static async getHistoriaItem(itemId) {
+    //     const [rows] = await pool.query("SELECT * FROM Historia_Casos_Items WHERE id = ?", [itemId]);
+    //     if (rows.length === 0) dbErrorMsg(404, "No hay historia de cambios para el item");
+    //     return new Historia("Item", rows);
+    // }
 
 }
