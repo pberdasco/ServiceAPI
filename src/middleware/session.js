@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // instalar 
 //    bcrypt        (encriptacion de clave)
 //    jsonwebtoken  (jwt)
@@ -22,8 +23,8 @@ export function checkJwt(req, res, next){
         // if (jwtContent.id != habilitado)
         //     res.status(401).send("Session invalida. JWT invalido")
         // else   
-            next();
+        next();
     }catch(error){
-        res.status(400).send("Session invalida. " + error)
+        res.status(400).send("Session invalida. " + error);
     }
 }

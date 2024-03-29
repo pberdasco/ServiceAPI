@@ -1,5 +1,10 @@
 import Direccion from "./direccion_model.js";
 import CasoItem from "./casos_items_model.js";
+import crypto from "crypto";
+
+function generarToken() {
+    return crypto.randomBytes(10).toString("hex");
+}
 
 export default class Caso{
     id;                     // int
@@ -44,12 +49,14 @@ export default class Caso{
         this.direccion.localidad = cabecera.dirLocalidad;
         this.direccion.codigoPostal = cabecera.dirCodigoPostal;
         this.fotoDestruccionLink = cabecera.fotoDestruccionLink;
-        this.tipoCaso = cabecera.tipoCaso;     
+        this.tipoCaso = cabecera.tipoCaso;  
+        this.tokenLink= cabecera.tokenLink;   
         items.forEach((i) => {
             this.items.push(new CasoItem(i));            
         }); 
     }
 
+    //convierte al formato que devuelve la api
     toJson() {
         return {   
             id: this.id,
@@ -65,10 +72,12 @@ export default class Caso{
             direccion: this.direccion,
             fotoDestruccionLink: this.fotoDestruccionLink,
             tipoCaso: this.tipoCaso,
+            tokenLink: this.tokenLink,
             items: this.items.map((i) => i.toJson()),
         };
     }
     
+    // Genera un objeto caso, con sus items a partir de rowsCaso que son las filas del select
     static newFromSelect(rowsCaso){
         const items = [];
         rowsCaso.forEach((x) => items.push(extraeItem(x)));
@@ -104,6 +113,7 @@ export default class Caso{
                 dirCodigoPostal: row.dirCodigoPostal,
                 fotoDestruccionLink: row.fotoDestruccionLink,
                 tipoCaso: row.tipoCaso,
+                tokenLink: row.tokenLink
             };
         }
 
@@ -126,6 +136,7 @@ export default class Caso{
         }
     }
 
+    // Genera el array de casos para el GetAll. (Un array de objetos Caso con sus items)
     static getArray(rowsJoin){
         const casos = [];
         let caso = [];
@@ -147,6 +158,7 @@ export default class Caso{
 
     //asegura que cualquier otro campo (sobretodo id y tipoProducto) que venga en la api no se tenga en cuenta
     // deben ser los datos de la base de datos menos el id
+    // también genera el token para ser usado en la url para acceder al caso
     static cabeceraToAdd(caso){
         console.log(caso);
         return {
@@ -165,7 +177,9 @@ export default class Caso{
             dirLocalidad: caso.dirLocalidad,
             dirCodigoPostal: caso.dirCodigoPostal,
             fotoDestruccionLink: caso.fotoDestruccionLink,
-            tipoCaso:caso.tipoCaso,     
+            tipoCaso:caso.tipoCaso, 
+            // Genera un token aleatorio hexadecimal para ser utilizado en la URL de acceso al caso. 
+            tokenLink: generarToken()
         };
     }
     static itemsToAdd(caso){

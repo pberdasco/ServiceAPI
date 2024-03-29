@@ -1,6 +1,6 @@
 //  https://jwt.io/
 import jwt from "jsonwebtoken";
-import config from "../config.js"
+import config from "../config.js";
 
 export default class JWT{
     // en el jwt mandar datos utiles del usuario (id, email, clienteId?, algun permiso?/claim)

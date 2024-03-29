@@ -16,11 +16,11 @@ export function logRequest(req, res, next){
             url: req.url,
             params: req.params,
             query: req.query,
-            userAgent: req.headers['user-agent'],
-            contentType: req.headers['content-type'],
-            autorizacion: req.headers['authorization'],
+            userAgent: req.headers["user-agent"],
+            contentType: req.headers["content-type"],
+            autorizacion: req.headers["authorization"],
             body: req.body
-        }
+        };
         console.log("Log: ", expressReq);
     }
     next();

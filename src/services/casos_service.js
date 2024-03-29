@@ -3,7 +3,8 @@ import Caso from "../models/casos_model.js";
 import CasoItem from "../models/casos_items_model.js";
 
 const selectJoin = "SELECT c.id as casoId, c.clienteId, c.fechaAlta, c.fechaInicio, c.fechaFin, c.statusDatosID, c.estadoID as cabEstadoID, c.retiro, " +
-                   "c.opcionRetiroId, c.idCRM, c.dirCalle, c.dirNumero, c.dirProvinciaId, p.nombre as dirProvincia, c.dirLocalidad, c.dirCodigoPostal, c.fotoDestruccionLink, c.tipoCaso, " +
+                   "c.opcionRetiroId, c.idCRM, c.dirCalle, c.dirNumero, c.dirProvinciaId, p.nombre as dirProvincia, c.dirLocalidad, c.dirCodigoPostal, " +
+                   "c.fotoDestruccionLink, c.tipoCaso, c.tokenLink," +
                    " i.id as itemId, i.fila, i.tipoProductoId, i.productoId, i.color, i.serie, i.nroFactura, i.fechaFactura, " + 
                    "i.estadoID as itemEstadoID, i.fallaCliente, i.fallaStdId, i.causa, cl.nombre, cl.apellido, cl.mail, cl.empresa, cl.tipoDoc, cl.documento, cl.idERP " +
                    " FROM Casos_Cabecera c LEFT JOIN Casos_Items i ON c.id = i.casoId" +
@@ -22,6 +23,12 @@ export default class CasoService{
 
     static async getById(id) {
         const [rows] = await pool.query(`${selectJoin} WHERE c.id = ?`, [id]);
+        if (rows.length === 0) dbErrorMsg(404, "El caso no existe");
+        return Caso.newFromSelect(rows);
+    }
+
+    static async getByToken(token) {
+        const [rows] = await pool.query(`${selectJoin} WHERE c.tokenLink = ?`, [token]);
         if (rows.length === 0) dbErrorMsg(404, "El caso no existe");
         return Caso.newFromSelect(rows);
     }

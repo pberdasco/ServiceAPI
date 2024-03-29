@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { showError } from "../middleware/controllerErrors.js";
 import AuthService from "../services/auth_service.js";
 
@@ -35,7 +36,7 @@ export default class AuthController{
         const id = req.params.id;
         try{
             const ok = await AuthService.delete(id);
-            res.status(204).send("Ok")
+            res.status(204).send("Ok");
         } catch (error){
             showError(req, res, error);
         }

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { showError } from "../middleware/controllerErrors.js";
 import CasoService from "../services/casos_service.js";
 
@@ -40,10 +41,19 @@ export default class CasoController {
         } 
     }
 
+    static async getByToken(req, res, next) {
+        const token = req.params.token;
+        try{
+            const caso = await CasoService.getByToken(token);
+            res.status(200).send(caso.toJson());
+        } catch (error){
+            showError(req, res, error);
+        }
+    }
 
     static async create(req, res, next) {
         const nuevoCaso = req.body;
-        const errores = CasoController.bodyValidations(nuevoCaso, "create")
+        const errores = CasoController.bodyValidations(nuevoCaso, "create");
         if (errores.length === 0){
             try{
                 const insertado = await CasoService.create(nuevoCaso);
@@ -52,15 +62,15 @@ export default class CasoController {
                 showError(req, res, error);
             }
         }else{
-            const error = {message: "Problemas con el req.body", fields: errores}
-            res.status(400).send(error)
+            const error = {message: "Problemas con el req.body", fields: errores};
+            res.status(400).send(error);
         }
     }
 
     static async updateCabecera(req, res, next) {
         const id = req.params.id;
         const caso = req.body;
-        const errores = CasoController.bodyValidations(caso, "update")
+        const errores = CasoController.bodyValidations(caso, "update");
         if (errores.length === 0){
             try{
                 const casoActualizado = await CasoService.updateCabecera(id, caso);
@@ -69,8 +79,8 @@ export default class CasoController {
                 res.status(error?.status || 500).send({message: error?.message || error});
             }
         }else{
-            const error = {message: "Problemas con el req.body", fields: errores}
-            res.status(400).send(error)
+            const error = {message: "Problemas con el req.body", fields: errores};
+            res.status(400).send(error);
         }
     }
 
@@ -104,7 +114,7 @@ export default class CasoController {
     static async updateItem(req, res, next) {
         const id = req.params.id;
         const casoItem = req.body;
-        const errores = CasoController.bodyValidations("caso", "updateItem")
+        const errores = CasoController.bodyValidations("caso", "updateItem");
         if (errores.length === 0){
             try{
                 const casoItemActualizado = await CasoService.updateItem(id, casoItem);
@@ -113,8 +123,8 @@ export default class CasoController {
                 res.status(error?.status || 500).send({message: error?.message || error});
             }
         }else{
-            const error = {message: "Problemas con el req.body", fields: errores}
-            res.status(400).send(error)
+            const error = {message: "Problemas con el req.body", fields: errores};
+            res.status(400).send(error);
         }
     }
 
@@ -125,36 +135,36 @@ export default class CasoController {
         return errores;
 
         //TODO: hacer una validacion correcta.
-        let allowedProperties;
-        let allowedItemProperties;
-        if (method === "create"){
-            allowedProperties = ["tipoProductoId", "idERP", "nombre", "serviceable"]
-            allowedItemProperties = [""]
-            if (isNaN(record?.tipoProductoId))
-                errores.push("tipoProductoId debe ser numerico");
-            if(!record.idERP)
-                errores.push("falta idERP");
-            if (!record.nombre)
-                errores.push("falta nombre")
+        // let allowedProperties;
+        // let allowedItemProperties;
+        // if (method === "create"){
+        //     allowedProperties = ["tipoProductoId", "idERP", "nombre", "serviceable"]
+        //     allowedItemProperties = [""]
+        //     if (isNaN(record?.tipoProductoId))
+        //         errores.push("tipoProductoId debe ser numerico");
+        //     if(!record.idERP)
+        //         errores.push("falta idERP");
+        //     if (!record.nombre)
+        //         errores.push("falta nombre")
 
-            if (!record.items || !Array.isArray(record.items) || record.items.length === 0) {
-                errores.push("Debe incluir al menos un registro en la propiedad 'items'");
-            } else {
-                for (const item of record.items) {
-                    if (!item.hasOwnProperty("deposito") || !item.hasOwnProperty("cantidad")) {
-                    errores.push("Cada registro de la propiedad 'items' debe tener los atributos 'deposito' y 'cantidad'");
-                    break;
-                    }
-                }
-            }
+        //     if (!record.items || !Array.isArray(record.items) || record.items.length === 0) {
+        //         errores.push("Debe incluir al menos un registro en la propiedad 'items'");
+        //     } else {
+        //         for (const item of record.items) {
+        //             if (!item.hasOwnProperty("deposito") || !item.hasOwnProperty("cantidad")) {
+        //             errores.push("Cada registro de la propiedad 'items' debe tener los atributos 'deposito' y 'cantidad'");
+        //             break;
+        //             }
+        //         }
+        //     }
                   
-        }else{
-            allowedProperties = ["tipoProductoId", "idERP", "nombre", "serviceable"]
-        }
-        const properties = Object.keys(record);
-        if (!properties.every(property => allowedProperties.includes(property)))
-            errores.push("Se recibieron propiedades que no corresponden");
+        // }else{
+        //     allowedProperties = ["tipoProductoId", "idERP", "nombre", "serviceable"]
+        // }
+        // const properties = Object.keys(record);
+        // if (!properties.every(property => allowedProperties.includes(property)))
+        //     errores.push("Se recibieron propiedades que no corresponden");
         
-        return errores;
+        // return errores;
     }
 }
