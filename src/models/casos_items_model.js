@@ -44,6 +44,6 @@ export default class CasoItem{
             fallaCliente : this.fallaCliente,       
             fallaStdId : this.fallaStdId,       
             causa: this.causa,
-        }
+        };
     }
 }

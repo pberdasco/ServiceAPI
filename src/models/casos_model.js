@@ -159,9 +159,8 @@ export default class Caso{
     //asegura que cualquier otro campo (sobretodo id y tipoProducto) que venga en la api no se tenga en cuenta
     // deben ser los datos de la base de datos menos el id
     // también genera el token para ser usado en la url para acceder al caso
-    static cabeceraToAdd(caso){
-        console.log(caso);
-        return {
+    static cabeceraToAddOrUpdate(caso){
+        const cabeceraData = {
             clienteId: caso.clienteId,  
             fechaAlta: caso.fechaAlta.substr(0, 10) || null,
             fechaInicio: caso.fechaInicio?.substr(0, 10) || null,  
@@ -177,10 +176,13 @@ export default class Caso{
             dirLocalidad: caso.dirLocalidad,
             dirCodigoPostal: caso.dirCodigoPostal,
             fotoDestruccionLink: caso.fotoDestruccionLink,
-            tipoCaso:caso.tipoCaso, 
-            // Genera un token aleatorio hexadecimal para ser utilizado en la URL de acceso al caso. 
-            tokenLink: generarToken()
+            tipoCaso:caso.tipoCaso,         
         };
+        // Agrega el token random si esta dando alta. En modificacion no lo toca.
+        if (!caso.tokenLink) {
+            cabeceraData.tokenLink = generarToken();
+        }  
+        return cabeceraData;
     }
     static itemsToAdd(caso){
         const items = [];
@@ -197,8 +199,7 @@ export default class Caso{
                 estadoID: x.estadoID,           
                 fallaCliente: x.fallaCliente,       
                 fallaStdId: x.fallaStdId,         
-                causa: x.causa});   
-                                
+                causa: x.causa});                            
         });
         return items;
     }

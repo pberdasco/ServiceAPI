@@ -114,7 +114,7 @@ export default class CasoController {
     static async updateItem(req, res, next) {
         const id = req.params.id;
         const casoItem = req.body;
-        const errores = CasoController.bodyValidations("caso", "updateItem");
+        const errores = CasoController.bodyValidations(casoItem, "updateItem");
         if (errores.length === 0){
             try{
                 const casoItemActualizado = await CasoService.updateItem(id, casoItem);
@@ -124,6 +124,24 @@ export default class CasoController {
             }
         }else{
             const error = {message: "Problemas con el req.body", fields: errores};
+            res.status(400).send(error);
+        }
+    }
+
+    static async updateAll(req, res, next) {
+        const id = req.params.id;
+        const caso = req.body;
+        const errores = CasoController.bodyValidations(caso, "update");
+        
+        if (errores.length === 0) {
+            try {
+                const casoActualizado = await CasoService.updateAll(id, caso);
+                res.status(200).send(casoActualizado.toJson());
+            } catch (error) {
+                res.status(error?.status || 500).send({ message: error?.message || error });
+            }
+        } else {
+            const error = { message: "Problemas con el req.body", fields: errores };
             res.status(400).send(error);
         }
     }

@@ -8,19 +8,21 @@ import config from "../config.js";
 *  En un middleware como este podriamos contar tambien llamadas, seguridad, etc
 */
 export function logRequest(req, res, next){
-    if (config.LOGREQUEST === "1"){
+    //LOGREQUEST: 1= long, 2 = short, other = none.
+    if (config.LOGREQUEST === "1" || config.LOGREQUEST === "2"){
         const expressReq = {
             time: new Date(),
-            hostName: req.hostname,
             method: req.method,
-            url: req.url,
+            url: `http://${req.hostname}:${req.socket.localPort}${req.originalUrl}`,
             params: req.params,
-            query: req.query,
-            userAgent: req.headers["user-agent"],
-            contentType: req.headers["content-type"],
-            autorizacion: req.headers["authorization"],
-            body: req.body
         };
+        if (config.LOGREQUEST === "1"){
+            expressReq.query= req.query;
+            expressReq.userAgent= req.headers["user-agent"];
+            expressReq.contentType= req.headers["content-type"];
+            expressReq.autorizacion= req.headers["authorization"];
+            expressReq.body= req.body;
+        }
         console.log("Log: ", expressReq);
     }
     next();

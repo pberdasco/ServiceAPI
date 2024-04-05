@@ -40,7 +40,7 @@ export default class CasoService{
             conn = await pool.getConnection();
             await conn.beginTransaction();
 
-            const casoToAdd = Caso.cabeceraToAdd(caso);
+            const casoToAdd = Caso.cabeceraToAddOrUpdate(caso);
             const [rows] = await conn.query("INSERT INTO Casos_Cabecera SET ?", [casoToAdd]); 
             casoToAdd.id = rows.insertId;
 
@@ -93,6 +93,37 @@ export default class CasoService{
         return CasoService.getItemById(id);
     }
 
+    static async updateAll(id, caso) {
+        let conn = null;
+        try {
+            conn = await pool.getConnection();
+            await conn.beginTransaction();
+    
+            const casoToUpdate = Caso.cabeceraToAddOrUpdate(caso);
+            await conn.query("UPDATE Casos_Cabecera SET ? WHERE id = ?", [casoToUpdate, id]);
+    
+            // Eliminar todos los items existentes del caso
+            await conn.query("DELETE FROM Casos_Items WHERE casoId = ?", [id]);
+    
+            // Insertar los nuevos items del caso
+            const itemsToAdd = Caso.itemsToAdd(caso);
+            for (let i = 0; i < itemsToAdd.length; i++) {
+                itemsToAdd[i].casoId = id;  //por las dudas piso el id del caso en los items con el correcto
+                await conn.query("INSERT INTO Casos_Items SET ?", [itemsToAdd[i]]);
+            }
+    
+            await conn.commit();
+            return CasoService.getById(id);
+        } catch (error) {
+            await conn.rollback();
+            throw error;
+        } finally {
+            if (conn) {
+                conn.release();
+            }
+        }
+    }
+    
     
 
 
