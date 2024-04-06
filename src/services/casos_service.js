@@ -2,11 +2,12 @@ import { pool, dbErrorMsg } from "../database/db.js";
 import Caso from "../models/casos_model.js";
 import CasoItem from "../models/casos_items_model.js";
 
-const selectJoin = "SELECT c.id as casoId, c.clienteId, c.fechaAlta, c.fechaInicio, c.fechaFin, c.statusDatosID, c.estadoID as cabEstadoID, c.retiro, " +
-                   "c.opcionRetiroId, c.idCRM, c.dirCalle, c.dirNumero, c.dirProvinciaId, p.nombre as dirProvincia, c.dirLocalidad, c.dirCodigoPostal, " +
-                   "c.fotoDestruccionLink, c.tipoCaso, c.tokenLink," +
-                   " i.id as itemId, i.fila, i.tipoProductoId, i.productoId, i.color, i.serie, i.nroFactura, i.fechaFactura, " + 
-                   "i.estadoID as itemEstadoID, i.fallaCliente, i.fallaStdId, i.causa, cl.nombre, cl.apellido, cl.mail, cl.empresa, cl.tipoDoc, cl.documento, cl.idERP " +
+const selectJoin = "SELECT c.id as casoId, c.clienteId, c.fechaAlta, c.fechaCarga, c.fechaInicio, c.fechaFin, c.statusDatosID, c.estadoID as cabEstadoID, " +
+                   "c.retiro, c.opcionRetiroId, c.idCRM, c.dirCalle, c.dirNumero, c.dirProvinciaId, p.nombre as dirProvincia, " +
+                   "c.dirLocalidad, c.dirCodigoPostal, c.tipoCaso, c.tokenLink, " +
+                   "i.id as itemId, i.fila, i.tipoProductoId, i.productoId, i.color, i.serie, i.nroFactura, i.fechaFactura, " + 
+                   "i.estadoID as itemEstadoID, i.fallaCliente, i.fallaStdId, i.causa, i.fotoDestruccionLink, i.fotoFacturaLink, cl.nombre, "+
+                   "cl.apellido, cl.mail, cl.empresa, cl.tipoDoc, cl.documento, cl.idERP " +
                    " FROM Casos_Cabecera c LEFT JOIN Casos_Items i ON c.id = i.casoId" +
                    " INNER JOIN Provincias p ON c.dirProvinciaId = p.id " +
                    "INNER JOIN Clientes cl ON c.clienteId = cl.id";

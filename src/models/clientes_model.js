@@ -16,6 +16,7 @@ export default class Clientes{
     dirCodigoPostal;    // string (7)
     idERP;              // string (10)
     idCRM;              // string 10
+    telefono;           // string (15)        
 
 
     constructor(row){ 
@@ -36,6 +37,7 @@ export default class Clientes{
         this.dirCodigoPostal = row.dirCodigoPostal;
         this.idERP = row.idERP;
         this.idCRM = row.idCRM;  
+        this.telefono = row.telefono;
     }
 
     toJson() {
@@ -57,6 +59,7 @@ export default class Clientes{
             dirCodigoPostal : this.dirCodigoPostal,
             idERP : this.idERP,
             idCRM : this.idCRM,
+            telefono : this.telefono,
         };
     }
 
@@ -79,6 +82,7 @@ export default class Clientes{
             dirCodigoPostal : cliente.dirCodigoPostal,
             idERP : cliente.idERP,
             idCRM : cliente.idCRM,
+            telefono : cliente.telefono,
         };
     }
 }

@@ -12,6 +12,8 @@ export default class CasoItem{
     fallaCliente;       //string(80)
     fallaStdId;         //int
     causa;              //string(80)
+    fotoDestruccionLink; // string(45)
+    fotoFacturaLink;     // string(45)
 
     constructor(item){
         this.id = item.id;                 
@@ -26,7 +28,9 @@ export default class CasoItem{
         this.estadoID = item.estadoID;           
         this.fallaCliente = item.fallaCliente;       
         this.fallaStdId = item.fallaStdId;         
-        this.causa= item.causa;     
+        this.causa= item.causa;  
+        this.fotoDestruccionLink = item.fotoDestruccionLink;
+        this.fotoFacturaLink = item.fotoFacturaLink;   
     }
 
     toJson(){
@@ -44,6 +48,8 @@ export default class CasoItem{
             fallaCliente : this.fallaCliente,       
             fallaStdId : this.fallaStdId,       
             causa: this.causa,
+            fotoDestruccionLink: this.fotoDestruccionLink,
+            fotoFacturaLink: this.fotoFacturaLink,
         };
     }
 }

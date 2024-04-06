@@ -76,7 +76,8 @@ export default class CasoController {
                 const casoActualizado = await CasoService.updateCabecera(id, caso);
                 res.status(200).send(casoActualizado.toJson());
             } catch (error){
-                res.status(error?.status || 500).send({message: error?.message || error});
+                showError(req, res, error);
+                //res.status(error?.status || 500).send({message: error?.message || error});
             }
         }else{
             const error = {message: "Problemas con el req.body", fields: errores};
@@ -120,7 +121,8 @@ export default class CasoController {
                 const casoItemActualizado = await CasoService.updateItem(id, casoItem);
                 res.status(200).send(casoItemActualizado.toJson());
             } catch (error){
-                res.status(error?.status || 500).send({message: error?.message || error});
+                showError(req, res, error);
+                //res.status(error?.status || 500).send({message: error?.message || error});
             }
         }else{
             const error = {message: "Problemas con el req.body", fields: errores};
@@ -138,7 +140,8 @@ export default class CasoController {
                 const casoActualizado = await CasoService.updateAll(id, caso);
                 res.status(200).send(casoActualizado.toJson());
             } catch (error) {
-                res.status(error?.status || 500).send({ message: error?.message || error });
+                showError(req, res, error);
+                //res.status(error?.status || 500).send({ message: error?.message || error });
             }
         } else {
             const error = { message: "Problemas con el req.body", fields: errores };

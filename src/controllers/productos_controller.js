@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { showError } from "../middleware/controllerErrors.js";
 import ProductoService from "../services/productos_service.js";
 
@@ -53,7 +54,7 @@ export default class ProductoController {
 
     static async create(req, res, next) {
         const nuevoProducto = req.body;
-        const errores = ProductoController.bodyValidations(nuevoProducto, "create")
+        const errores = ProductoController.bodyValidations(nuevoProducto, "create");
         if (errores.length === 0){
             try{
                 const insertado = await ProductoService.create(nuevoProducto);
@@ -62,8 +63,8 @@ export default class ProductoController {
                 showError(req, res, error);
             }
         }else{
-            const error = {message: "Problemas con el req.body", fields: errores}
-            res.status(400).send(error)
+            const error = {message: "Problemas con el req.body", fields: errores};
+            res.status(400).send(error);
         }
     }
 
@@ -71,7 +72,7 @@ export default class ProductoController {
         const id = req.params.id;
         try{
             const ok = await ProductoService.delete(id);
-            res.status(204).send("Ok")
+            res.status(204).send("Ok");
         } catch (error){
             showError(req, res, error);
         }
@@ -80,7 +81,7 @@ export default class ProductoController {
     static async update(req, res, next) {
         const id = req.params.id;
         const producto = req.body;
-        const errores = ProductoController.bodyValidations(producto, "update")
+        const errores = ProductoController.bodyValidations(producto, "update");
         if (errores.length === 0){
             try{
                 const productoActualizado = await ProductoService.update(id, producto);
@@ -89,8 +90,8 @@ export default class ProductoController {
                 showError(req, res, error);
             }
         }else{
-            const error = {message: "Problemas con el req.body", fields: errores}
-            res.status(400).send(error)
+            const error = {message: "Problemas con el req.body", fields: errores};
+            res.status(400).send(error);
         }
     }
 
@@ -99,15 +100,15 @@ export default class ProductoController {
         const errores = [];
         let allowedProperties;
         if (method === "create"){
-            allowedProperties = ["tipoProductoId", "idERP", "nombre", "serviceable"]
+            allowedProperties = ["tipoProductoId", "idERP", "nombre", "serviceable"];
             if (isNaN(record?.tipoProductoId))
                 errores.push("tipoProductoId debe ser numerico");
             if(!record.idERP)
                 errores.push("falta idERP");
             if (!record.nombre)
-                errores.push("falta nombre")
+                errores.push("falta nombre");
         }else{
-            allowedProperties = ["tipoProductoId", "idERP", "nombre", "serviceable"]
+            allowedProperties = ["tipoProductoId", "idERP", "nombre", "serviceable"];
         }
         const properties = Object.keys(record);
         if (!properties.every(property => allowedProperties.includes(property)))

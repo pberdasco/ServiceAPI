@@ -11,6 +11,7 @@ export default class Caso{
     // codigo;                 // string(8)  => eliminado ver si en algun momento se pone en el objeto pero no en la base
     cliente;                // {id, nombre, apellido, mail, empresa, tipoDoc, documento. idERP, idCRM}
     fechaAlta;              // date
+    fechaCarga;             // date
     fechaInicio;            // date
     fechaFin;                // date
     statusDatosID;           // int
@@ -19,7 +20,6 @@ export default class Caso{
     opcionRetiroId;          // int
     idCRM;                   // string(10)
     direccion = new Direccion();
-    fotoDestruccionLink;     // string(45)
     tipoCaso;                // string(1)
     items = [];              // CasoItems collection
 
@@ -35,6 +35,7 @@ export default class Caso{
         this.cliente.documento = cabecera.cliDocumento;
         this.cliente.idERP = cabecera.cliIdERP;
         this.fechaAlta = cabecera.fechaAlta;
+        this.fechaCarga = cabecera.fechaCarga;
         this.fechaInicio = cabecera.fechaInicio;  
         this.fechaFin = cabecera.fechaFin;         
         this.statusDatosID = cabecera.statusDatosID;
@@ -48,7 +49,6 @@ export default class Caso{
         this.direccion.provincia = cabecera.dirProvincia;
         this.direccion.localidad = cabecera.dirLocalidad;
         this.direccion.codigoPostal = cabecera.dirCodigoPostal;
-        this.fotoDestruccionLink = cabecera.fotoDestruccionLink;
         this.tipoCaso = cabecera.tipoCaso;  
         this.tokenLink= cabecera.tokenLink;   
         items.forEach((i) => {
@@ -62,6 +62,7 @@ export default class Caso{
             id: this.id,
             cliente: this.cliente,
             fechaAlta: this.fechaAlta,
+            fechaCarga: this.fechaCarga,
             fechaInicio: this.fechaInicio,
             fechaFin: this.fechaFin,
             statusDatosID: this.statusDatosID,
@@ -70,7 +71,6 @@ export default class Caso{
             opcionRetiroId: this.opcionRetiroId,
             idCRM: this.idCRM,
             direccion: this.direccion,
-            fotoDestruccionLink: this.fotoDestruccionLink,
             tipoCaso: this.tipoCaso,
             tokenLink: this.tokenLink,
             items: this.items.map((i) => i.toJson()),
@@ -98,6 +98,7 @@ export default class Caso{
                 cliDocumento: row.documento,
                 cliIdERP: row.idERP,  
                 fechaAlta: row.fechaAlta?.toISOString().slice(0, 10) || null,
+                fechaCarga: row.fechaCarga?.toISOString().slice(0, 10) || null,
                 fechaInicio: row.fechaInicio?.toISOString().slice(0, 10) || null,  
                 fechaFin: row.fechaFin?.toISOString().slice(0, 10) || null,         
                 statusDatosID: row.statusDatosID,
@@ -111,7 +112,6 @@ export default class Caso{
                 dirProvincia: row.dirProvincia,
                 dirLocalidad: row.dirLocalidad,
                 dirCodigoPostal: row.dirCodigoPostal,
-                fotoDestruccionLink: row.fotoDestruccionLink,
                 tipoCaso: row.tipoCaso,
                 tokenLink: row.tokenLink
             };
@@ -132,6 +132,8 @@ export default class Caso{
                 fallaCliente : row.fallaCliente,       
                 fallaStdId : row.fallaStdId,       
                 causa: row.causa,
+                fotoDestruccionLink: row.fotoDestruccionLink,
+                fotoFacturaLink: row.fotoFacturaLink,
             };
         }
     }
@@ -160,30 +162,31 @@ export default class Caso{
     // deben ser los datos de la base de datos menos el id
     // también genera el token para ser usado en la url para acceder al caso
     static cabeceraToAddOrUpdate(caso){
-        const cabeceraData = {
-            clienteId: caso.clienteId,  
-            fechaAlta: caso.fechaAlta.substr(0, 10) || null,
-            fechaInicio: caso.fechaInicio?.substr(0, 10) || null,  
-            fechaFin: caso.fechaFin?.substr(0, 10) || null,         
-            statusDatosID: caso.statusDatosID,
-            estadoID: caso.estadoID,
-            retiro: caso.retiro,
-            opcionRetiroId: caso.opcionRetiroId,
-            idCRM: caso.idCRM,
-            dirCalle: caso.dirCalle,
-            dirNumero: caso.dirNumero,
-            dirProvinciaId: caso.dirProvinciaId,
-            dirLocalidad: caso.dirLocalidad,
-            dirCodigoPostal: caso.dirCodigoPostal,
-            fotoDestruccionLink: caso.fotoDestruccionLink,
-            tipoCaso:caso.tipoCaso,         
-        };
+        const cabeceraData = {};
+        if (caso.clienteId !== undefined) cabeceraData.clienteId = caso.clienteId;
+        if (caso.fechaAlta) cabeceraData.fechaAlta = caso.fechaAlta.substr(0, 10);
+        if (caso.fechaCarga) cabeceraData.fechaCarga = caso.fechaCarga.substr(0, 10);
+        if (caso.fechaInicio) cabeceraData.fechaInicio = caso.fechaInicio.substr(0, 10);
+        if (caso.fechaFin) cabeceraData.fechaFin = caso.fechaFin.substr(0, 10);
+        if (caso.statusDatosID !== undefined) cabeceraData.statusDatosID = caso.statusDatosID;
+        if (caso.estadoID !== undefined) cabeceraData.estadoID = caso.estadoID;
+        if (caso.retiro !== undefined) cabeceraData.retiro = caso.retiro;
+        if (caso.opcionRetiroId !== undefined) cabeceraData.opcionRetiroId = caso.opcionRetiroId;
+        if (caso.idCRM !== undefined) cabeceraData.idCRM = caso.idCRM;
+        if (caso.dirCalle !== undefined) cabeceraData.dirCalle = caso.dirCalle;
+        if (caso.dirNumero !== undefined) cabeceraData.dirNumero = caso.dirNumero;
+        if (caso.dirProvinciaId !== undefined) cabeceraData.dirProvinciaId = caso.dirProvinciaId;
+        if (caso.dirLocalidad !== undefined) cabeceraData.dirLocalidad = caso.dirLocalidad;
+        if (caso.dirCodigoPostal !== undefined) cabeceraData.dirCodigoPostal = caso.dirCodigoPostal;
+        if (caso.tipoCaso !== undefined) cabeceraData.tipoCaso = caso.tipoCaso;
+
         // Agrega el token random si esta dando alta. En modificacion no lo toca.
         if (!caso.tokenLink) {
             cabeceraData.tokenLink = generarToken();
         }  
         return cabeceraData;
     }
+
     static itemsToAdd(caso){
         const items = [];
         caso.items.forEach((x) => {
@@ -199,7 +202,10 @@ export default class Caso{
                 estadoID: x.estadoID,           
                 fallaCliente: x.fallaCliente,       
                 fallaStdId: x.fallaStdId,         
-                causa: x.causa});                            
+                causa: x.causa,
+                fotoDestruccionLink: x.fotoDestuccionLink,
+                fotoFacturaLink: x.fotoFacturaLink,
+            });                            
         });
         return items;
     }
