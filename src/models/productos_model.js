@@ -4,12 +4,12 @@ export default class Productos{
     tipoProducto;      // nombre del tipo de producto  Nota: no esta en la base
     idERP;             // string (20)
     nombre;            // string (45)
-    serviceable        // int 0=false 1=true
+    serviceable;       // int 0=false 1=true
 
     constructor(row){
         this.id = row.id;
         this.tipoProductoId = row.tipoProductoId;
-        this.tipoProducto = row.tipoProducto;
+        this.tipoProducto = row.tipoNombre;
         this.idERP = row.idERP;
         this.nombre = row.nombre;
         this.serviceable = row.serviceable;
@@ -33,6 +33,6 @@ export default class Productos{
             idERP: producto.idERP,
             nombre: producto.nombre,
             serviceable: producto.serviceable
-        }
+        };
     }
 }

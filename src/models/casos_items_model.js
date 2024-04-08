@@ -2,8 +2,7 @@ export default class CasoItem{
     id;                 //int
     casoId;             //int
     fila;               //int
-    tipoProductoId;     //int
-    prouctoId;          //int
+    producto;           // {tipoId, tipo, id, nombre, idERP, serviceable}
     color;              //string(15)
     serie;              //string(15)
     nroFactura;         //string(20)
@@ -18,9 +17,14 @@ export default class CasoItem{
     constructor(item){
         this.id = item.id;                 
         this.casoId = item.casoId;             
-        this.fila = item.fila;               
-        this.tipoProductoId = item.tipoProductoId;     
-        this.productoId = item.productoId;          
+        this.fila = item.fila;  
+        this.producto = {}; 
+        this.producto.tipoId = item.tipoProductoId;
+        this.producto.tipo = item.tipoProducto;           
+        this.producto.id = item.productoId;     
+        this.producto.nombre = item.producto;
+        this.producto.idERP = item.productoIdERP;
+        this.producto.serviceable = item.productoServiceable;   
         this.color = item.color;              
         this.serie = item.serie;              
         this.nroFactura = item.nroFactura;         
@@ -38,8 +42,7 @@ export default class CasoItem{
             id: this.id,
             casoId: this.casoId,             
             fila: this.fila,               
-            tipoProductoId: this.tipoProductoId,     
-            productoId: this.productoId,         
+            producto: this.producto,      // objeto producto         
             color: this.color,         
             serie: this.serie,              
             nroFactura: this.nroFactura,         

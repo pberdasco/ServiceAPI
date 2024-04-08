@@ -9,7 +9,7 @@ function generarToken() {
 export default class Caso{
     id;                     // int
     // codigo;                 // string(8)  => eliminado ver si en algun momento se pone en el objeto pero no en la base
-    cliente;                // {id, nombre, apellido, mail, empresa, tipoDoc, documento. idERP, idCRM}
+    cliente;                // {id, nombre, apellido, mail, empresa, tipoDoc, documento. idERP, idCRM, telefono}
     fechaAlta;              // date
     fechaCarga;             // date
     fechaInicio;            // date
@@ -19,6 +19,7 @@ export default class Caso{
     retiro;                  // int
     opcionRetiroId;          // int
     idCRM;                   // string(10)
+    telefono;                // string (20)
     direccion = new Direccion();
     tipoCaso;                // string(1)
     items = [];              // CasoItems collection
@@ -34,6 +35,7 @@ export default class Caso{
         this.cliente.tipoDoc = cabecera.cliTipoDoc;
         this.cliente.documento = cabecera.cliDocumento;
         this.cliente.idERP = cabecera.cliIdERP;
+        this.cliente.telefono = cabecera.cliTelefono;
         this.fechaAlta = cabecera.fechaAlta;
         this.fechaCarga = cabecera.fechaCarga;
         this.fechaInicio = cabecera.fechaInicio;  
@@ -60,7 +62,7 @@ export default class Caso{
     toJson() {
         return {   
             id: this.id,
-            cliente: this.cliente,
+            cliente: this.cliente,                     //objeto cliente
             fechaAlta: this.fechaAlta,
             fechaCarga: this.fechaCarga,
             fechaInicio: this.fechaInicio,
@@ -70,7 +72,7 @@ export default class Caso{
             retiro: this.retiro,
             opcionRetiroId: this.opcionRetiroId,
             idCRM: this.idCRM,
-            direccion: this.direccion,
+            direccion: this.direccion,                 //objeto direccion
             tipoCaso: this.tipoCaso,
             tokenLink: this.tokenLink,
             items: this.items.map((i) => i.toJson()),
@@ -96,7 +98,8 @@ export default class Caso{
                 cliEmpresa: row.empresa,
                 cliTipoDoc: row.tipoDoc,
                 cliDocumento: row.documento,
-                cliIdERP: row.idERP,  
+                cliIdERP: row.idERP, 
+                cliTelefono: row.telefono, 
                 fechaAlta: row.fechaAlta?.toISOString().slice(0, 10) || null,
                 fechaCarga: row.fechaCarga?.toISOString().slice(0, 10) || null,
                 fechaInicio: row.fechaInicio?.toISOString().slice(0, 10) || null,  
@@ -122,8 +125,12 @@ export default class Caso{
                 id: row.itemId,
                 casoId: row.casoId,             
                 fila: row.fila,               
-                tipoProductoId: row.tipoProductoId,     
+                tipoProductoId: row.tipoProductoId,
+                tipoProducto: row.tipoProductoNombre,     
                 productoId: row.productoId,         
+                producto: row.productoNombre,
+                productoIdERP: row.productoIdErp,
+                productoServiceable: row.productoServiceable,
                 color: row.color,         
                 serie: row.serie,              
                 nroFactura: row.nroFactura,         
