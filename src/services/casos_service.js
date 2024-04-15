@@ -4,7 +4,7 @@ import CasoItem from "../models/casos_items_model.js";
 
 const selectJoin = "SELECT c.id as casoId, c.clienteId, c.fechaAlta, c.fechaCarga, c.fechaInicio, c.fechaFin, c.statusDatosID, c.estadoID as cabEstadoID, " +
                    "c.retiro, c.opcionRetiroId, c.idCRM, c.dirCalle, c.dirNumero, c.dirProvinciaId, p.nombre as dirProvincia, " +
-                   "c.dirLocalidad, c.dirCodigoPostal, c.tipoCaso, c.tokenLink, " +
+                   "c.dirLocalidad, c.dirCodigoPostal, c.tipoCaso, c.tokenLink, c.mensaje, " +
                    "i.id as itemId, i.fila, i.tipoProductoId, i.productoId, i.color, i.serie, i.nroFactura, i.fechaFactura, " + 
                    "i.estadoID as itemEstadoID, i.fallaCliente, i.fallaStdId, i.causa, i.fotoDestruccionLink, i.fotoFacturaLink, cl.nombre, "+
                    "cl.apellido, cl.mail, cl.empresa, cl.tipoDoc, cl.documento, cl.idERP, cl.telefono, " +

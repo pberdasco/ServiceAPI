@@ -22,6 +22,7 @@ export default class Caso{
     telefono;                // string (20)
     direccion = new Direccion();
     tipoCaso;                // string(1)
+    mensaje;                 // string(200) para enviarle mensajes al cliente                
     items = [];              // CasoItems collection
 
     constructor(cabecera, items){
@@ -53,6 +54,7 @@ export default class Caso{
         this.direccion.codigoPostal = cabecera.dirCodigoPostal;
         this.tipoCaso = cabecera.tipoCaso;  
         this.tokenLink= cabecera.tokenLink;   
+        this.mensaje = cabecera.mensaje;
         items.forEach((i) => {
             this.items.push(new CasoItem(i));            
         }); 
@@ -75,6 +77,7 @@ export default class Caso{
             direccion: this.direccion,                 //objeto direccion
             tipoCaso: this.tipoCaso,
             tokenLink: this.tokenLink,
+            mensaje: this.mensaje,
             items: this.items.map((i) => i.toJson()),
         };
     }
@@ -116,7 +119,8 @@ export default class Caso{
                 dirLocalidad: row.dirLocalidad,
                 dirCodigoPostal: row.dirCodigoPostal,
                 tipoCaso: row.tipoCaso,
-                tokenLink: row.tokenLink
+                tokenLink: row.tokenLink,
+                mensaje: row.mensaje,
             };
         }
 
@@ -186,6 +190,7 @@ export default class Caso{
         if (caso.dirLocalidad !== undefined) cabeceraData.dirLocalidad = caso.dirLocalidad;
         if (caso.dirCodigoPostal !== undefined) cabeceraData.dirCodigoPostal = caso.dirCodigoPostal;
         if (caso.tipoCaso !== undefined) cabeceraData.tipoCaso = caso.tipoCaso;
+        if (caso.mensaje !== undefined) cabeceraData.mensaje = caso.mensaje;
 
         // Agrega el token random si esta dando alta. En modificacion no lo toca.
         if (!caso.tokenLink) {
