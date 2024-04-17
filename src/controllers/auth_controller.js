@@ -4,9 +4,9 @@ import AuthService from "../services/auth_service.js";
 
 export default class AuthController{
     static async userRegister(req, res, next) {
-        const {nombre, mail, password} = req.body;   
+        const user = req.body;   
         try{
-            const usuario = await AuthService.userRegister({nombre, mail, password});
+            const usuario = await AuthService.userRegister(user);
             res.status(200).send(usuario.toJson());
         } catch (error){
             showError(req, res, error);

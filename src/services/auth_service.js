@@ -4,6 +4,7 @@ import JWT from "../middleware/jwt_handle.js";
 
 export default class AuthService{
     static async userRegister(user){
+        console.log("userRegister: ", user);
         const userToAdd = await Usuarios.toAdd(user);
         try{
             const [rows] = await pool.query("INSERT INTO Usuarios SET ?", [userToAdd]); 
@@ -17,7 +18,7 @@ export default class AuthService{
 
     static async userLogin(mail, pass){
         try{
-            const [rows] = await pool.query("SELECT * FROM Usuarios WHERE mail = ?", [mail]);
+            const [rows] = await pool.query("SELECT * FROM Usuarios u LEFT JOIN ClientesERP c ON u.idClienteERP = c.idClienteERP WHERE mail = ?", [mail]);
             if (rows.length === 0) dbErrorMsg(401, "Credenciales Invalidas");
 
             const isOk = await Usuarios.validaPassword(pass, rows[0]);
@@ -33,7 +34,7 @@ export default class AuthService{
 
     static async getAll() {
         try{
-            const [rows] = await pool.query("SELECT id, nombre, mail, clienteId FROM Usuarios");
+            const [rows] = await pool.query("SELECT u.id, u.nombre, u.mail, u.idClienteERP, u.derechos, c.empresa FROM Usuarios u LEFT JOIN ClientesERP c ON u.idClienteERP = c.idClienteERP");
             return rows;
         }catch(error){
             dbErrorMsg(500, error?.sqlMessage);

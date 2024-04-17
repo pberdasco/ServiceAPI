@@ -6,6 +6,7 @@
 // Header -> Authorization -> Bearer "token"
 import JWT from "./jwt_handle.js";
 
+// Middleware llamado por los routers
 export function checkJwt(req, res, next){
     try{
         const jwtByUser = req.headers.authorization || "" ;

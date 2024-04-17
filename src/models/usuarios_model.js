@@ -4,15 +4,19 @@ export default class Usuarios{
     id;                 //int         -- pk autoIncrement
     nombre;             //string(30)
     mail;               //string(60)  -- unique
-    clienteId;          //int
+    idClienteERP;       //string(10)
+    derechos;           //string(20)  ="100000000"  pos1=1=todo, pos2=1=cargaCasos, pos3=1...
     password;           //string(64)
+    empresa;            //string(30)  -- no se graba es del join con ClientesERP
 
     constructor(userToAdd){
         this.id = userToAdd.id;
         this.nombre = userToAdd.nombre;
         this.mail = userToAdd.mail;
-        this.clienteId = 0;
+        this.idClienteERP = userToAdd.idClienteERP || "";
+        this.derechos = userToAdd.derechos || "0000000000";
         this.password = userToAdd.password;
+        this.empresa = userToAdd.empresa;
     }
 
     toJson() {
@@ -20,7 +24,9 @@ export default class Usuarios{
             id: this.id,
             nombre: this.nombre,
             mail: this.mail,
-            clienteId: this.clienteId,
+            idClienteERP: this.idClienteERP,
+            derechos: this.derechos,
+            empresa: this.empresa,
             //password: this.password
         };
     }
@@ -33,7 +39,8 @@ export default class Usuarios{
         return{
             nombre: user.nombre,
             mail: user.mail,
-            clienteId: user.clienteId, 
+            idClienteERP: user.idClienteERP || "",
+            derechos: user.derechos || "0000000000",
             password: encriptedPassword,
         };
     }
