@@ -5,16 +5,16 @@ import { logRequest } from "../middleware/logRequest.js";
 
 export const clienteRouter = Router();
 
-clienteRouter.get("/", logRequest, ClienteController.getAll);
+clienteRouter.get("/", logRequest(), ClienteController.getAll);
 // productoRouter.get('/', logRequest, checkJwt, ProductoController.getAll);
 
-clienteRouter.get("/:id", ClienteController.getById);
+clienteRouter.get("/:id", logRequest(), ClienteController.getById);
 
-clienteRouter.get("/email/:email", ClienteController.getByEmail);
+clienteRouter.get("/email/:email", logRequest(), ClienteController.getByEmail);
 
-clienteRouter.post("/", ClienteController.create);
+clienteRouter.post("/", logRequest(), ClienteController.create);
 
-clienteRouter.put("/:id", ClienteController.update);
+clienteRouter.put("/:id", logRequest(), ClienteController.update);
 
-clienteRouter.delete("/:id", ClienteController.delete);
+clienteRouter.delete("/:id", logRequest(), ClienteController.delete);
 

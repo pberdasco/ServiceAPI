@@ -6,24 +6,39 @@ import config from "../config.js";
 *     desde el router antes del controler
 *
 *  En un middleware como este podriamos contar tambien llamadas, seguridad, etc
+* Esta devolviend una funcion para que pueda recibir parametros.
+* Se puede llamar: 
+*               casoRouter.get("/detallado", logRequest({ logLevel: "2" }), CasoController.getAll); //  toma nivel 2
+*               casoRouter.get("/detallado", logRequest(), CasoController.getAll); //toma default de variable de entorno
 */
-export function logRequest(req, res, next){
-    //LOGREQUEST: 1= long, 2 = short, other = none.
-    if (config.LOGREQUEST === "1" || config.LOGREQUEST === "2"){
-        const expressReq = {
-            time: new Date(),
-            method: req.method,
-            url: `http://${req.hostname}:${req.socket.localPort}${req.originalUrl}`,
-            params: req.params,
-        };
-        if (config.LOGREQUEST === "1"){
-            expressReq.query= req.query;
-            expressReq.userAgent= req.headers["user-agent"];
-            expressReq.contentType= req.headers["content-type"];
-            expressReq.autorizacion= req.headers["authorization"];
-            expressReq.body= req.body;
+export function logRequest(options = {}) {
+    const defaultLogLevel = config.LOGREQUEST || "none"; // Valor predeterminado desde la configuración global
+    const { logLevel = defaultLogLevel } = options; // Desestructura y usa el valor proporcionado o el predeterminado
+
+    return function(req, res, next) {
+        // Verificar si el nivel de registro es adecuado
+        // 1: corto, 2: corto con body, 3: largo con body. Otro valor no imprime. Body si es < 1000 carateres
+        if (logLevel === "1" || logLevel === "2" || logLevel === "3") {
+            const expressReq = {
+                time: new Date(),
+                methodAndUrl: `${req.method}-http://${req.hostname}:${req.socket.localPort}${req.originalUrl}`,
+                paramsAndQuery: `${req.params} - ${req.query}`,
+            };
+
+            if (logLevel === "3") {
+                expressReq.userAgent = req.headers["user-agent"];
+                expressReq.contentType = req.headers["content-type"];
+                expressReq.autorizacion = req.headers["authorization"];
+            }
+
+            // Controlar si el body debe ser logueado o no
+            if ((logLevel === "2" || logLevel === "3") && req.body && req.body.length < 1000) {
+                expressReq.body = req.body;
+            }
+            
+            console.log("Log: ", expressReq);
         }
-        console.log("Log: ", expressReq);
-    }
-    next();
+
+        next();
+    };
 }

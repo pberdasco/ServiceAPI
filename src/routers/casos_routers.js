@@ -5,16 +5,16 @@ import { logRequest } from "../middleware/logRequest.js";
 
 export const casoRouter = Router();
 
-casoRouter.get("/", logRequest, CasoController.getAll);
-casoRouter.get("/:id", logRequest, CasoController.getById);
-casoRouter.get("/token/:token", logRequest, CasoController.getByToken);
-casoRouter.post("/", logRequest, CasoController.create);
+casoRouter.get("/", logRequest(), CasoController.getAll);
+casoRouter.get("/:id", logRequest(), CasoController.getById);
+casoRouter.get("/token/:token", logRequest(), CasoController.getByToken);
+casoRouter.post("/", logRequest(), CasoController.create);
 // casoRouter.post('/', logRequest, checkJwt, CasoController.create);
-casoRouter.put("/:id", logRequest, CasoController.updateCabecera);
-casoRouter.put("/all/:id", logRequest, CasoController.updateAll);
+casoRouter.put("/:id", logRequest(), CasoController.updateCabecera);
+casoRouter.put("/all/:id", logRequest(), CasoController.updateAll);
 
-casoRouter.get("/Item/:id", CasoController.getItemById);
-casoRouter.put("/Item/:id", CasoController.updateItem);
+casoRouter.get("/Item/:id", logRequest(), CasoController.getItemById);
+casoRouter.put("/Item/:id", logRequest(), CasoController.updateItem);
 
 
 

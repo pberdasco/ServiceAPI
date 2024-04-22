@@ -6,8 +6,9 @@ const selectJoin = "SELECT c.id as casoId, c.clienteId, c.fechaAlta, c.fechaCarg
                    "c.retiro, c.opcionRetiroId, c.idCRM, c.dirCalle, c.dirNumero, c.dirProvinciaId, p.nombre as dirProvincia, " +
                    "c.dirLocalidad, c.dirCodigoPostal, c.tipoCaso, c.tokenLink, c.mensaje, " +
                    "i.id as itemId, i.fila, i.tipoProductoId, i.productoId, i.color, i.serie, i.nroFactura, i.fechaFactura, " + 
-                   "i.estadoID as itemEstadoID, i.fallaCliente, i.fallaStdId, i.causa, i.fotoDestruccionLink, i.fotoFacturaLink, cl.nombre, "+
-                   "cl.apellido, cl.mail, cl.empresa, cl.tipoDoc, cl.documento, cl.idERP, cl.telefono, " +
+                   "i.estadoID as itemEstadoID, i.fallaCliente, i.fallaStdId, i.causa, i.fotoDestruccionLink, i.fotoFacturaLink, "+
+                   "i.aiFacturaWarn, i.aiFotoWarn, i.aiEsFactura, i.aiFechaFactura, i.aiTieneItemValido, i.aiTextoItemValido, i.aiTextoImagen, " +
+                   "cl.nombre, cl.apellido, cl.mail, cl.empresa, cl.tipoDoc, cl.documento, cl.idERP, cl.telefono, " +
                    "pr.idERP as productoIdErp, pr.nombre as productoNombre, pr.serviceable as productoServiceable, tp.nombre as tipoProductoNombre" +
                    " FROM Casos_Cabecera c " + 
                    " LEFT JOIN Casos_Items i ON c.id = i.casoId " +
@@ -105,7 +106,6 @@ export default class CasoService{
             await conn.beginTransaction();
     
             const casoToUpdate = Caso.cabeceraToAddOrUpdate(caso);
-            console.log("updateAll casoToUpdate: ", id, casoToUpdate);
             await conn.query("UPDATE Casos_Cabecera SET ? WHERE id = ?", [casoToUpdate, id]);
     
             // Eliminar todos los items existentes del caso
@@ -115,7 +115,6 @@ export default class CasoService{
             const itemsToAdd = Caso.itemsToAdd(caso);
             for (let i = 0; i < itemsToAdd.length; i++) {
                 itemsToAdd[i].casoId = id;  //por las dudas piso el id del caso en los items con el correcto
-                console.log("--itemToAdd: ", itemsToAdd[i]);
                 await conn.query("INSERT INTO Casos_Items SET ?", [itemsToAdd[i]]);
             }
     

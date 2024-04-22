@@ -35,6 +35,13 @@ export default class CasoItem{
         this.causa= item.causa;  
         this.fotoDestruccionLink = item.fotoDestruccionLink;
         this.fotoFacturaLink = item.fotoFacturaLink;   
+        this.aiFacturaWarn = item.aiFacturaWarn; 
+        this.aiFotoWarn = item.aiFotoWarn; 
+        this.aiEsFactura = item.aiEsFactura; 
+        this.aiFechaFactura = item.aiFechaFactura; 
+        this.aiTieneItemValido = item.aiTieneItemValido;
+        this.aiTextoItemValido = item.aiTextoItemValido; 
+        this.aiTextoImagen = item.aiTextoImagen;
     }
 
     toJson(){
@@ -53,6 +60,13 @@ export default class CasoItem{
             causa: this.causa,
             fotoDestruccionLink: this.fotoDestruccionLink,
             fotoFacturaLink: this.fotoFacturaLink,
+            aiFacturaWarn: this.aiFacturaWarn, 
+            aiFotoWarn: this.aiFotoWarn,
+            aiEsFactura: this.aiEsFactura, 
+            aiFechaFactura: this.aiFechaFactura, 
+            aiTieneItemValido: this.aiTieneItemValido,
+            aiTextoItemValido: this.aiTextoItemValido, 
+            aiTextoImagen: this.aiTextoImagen,
         };
     }
 }

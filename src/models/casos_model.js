@@ -145,6 +145,13 @@ export default class Caso{
                 causa: row.causa,
                 fotoDestruccionLink: row.fotoDestruccionLink,
                 fotoFacturaLink: row.fotoFacturaLink,
+                aiFacturaWarn: row.aiFacturaWarn, 
+                aiFotoWarn: row.aiFotoWarn, 
+                aiEsFactura: row.aiEsFactura, 
+                aiFechaFactura: row.aiFechaFactura, 
+                aiTieneItemValido: row.aiTieneItemValido, 
+                aiTextoItemValido: row.aiTextoItemValido, 
+                aiTextoImagen: row.aiTextoImagen
             };
         }
     }
@@ -217,6 +224,13 @@ export default class Caso{
                 causa: x.causa,
                 fotoDestruccionLink: x.fotoDestuccionLink,
                 fotoFacturaLink: x.fotoFacturaLink,
+                aiFacturaWarn: x.aiFacturaWarn, 
+                aiFotoWarn: x.aiFotoWarn, 
+                aiEsFactura: x.aiEsFactura, 
+                aiFechaFactura: x.aiFechaFactura, 
+                aiTieneItemValido: x.aiTieneItemValido, 
+                aiTextoItemValido: x.aiTextoItemValido, 
+                aiTextoImagen: x.aiTextoImagen
             });                            
         });
         return items;

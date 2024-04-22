@@ -4,4 +4,4 @@ import { logRequest } from "../middleware/logRequest.js";
 
 export const provinciaRouter = Router();
 
-provinciaRouter.get("/", logRequest, ProvinciaController.getAll);
+provinciaRouter.get("/", logRequest(), ProvinciaController.getAll);
