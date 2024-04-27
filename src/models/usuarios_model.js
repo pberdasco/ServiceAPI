@@ -14,7 +14,7 @@ export default class Usuarios{
         this.nombre = userToAdd.nombre;
         this.mail = userToAdd.mail;
         this.idClienteERP = userToAdd.idClienteERP || "";
-        this.derechos = userToAdd.derechos || "0000000000";
+        this.derechos = userToAdd.derechos || "0000";
         this.password = userToAdd.password;
         this.empresa = userToAdd.empresa;
     }
@@ -40,8 +40,17 @@ export default class Usuarios{
             nombre: user.nombre,
             mail: user.mail,
             idClienteERP: user.idClienteERP || "",
-            derechos: user.derechos || "0000000000",
+            derechos: user.derechos || "0000",
             password: encriptedPassword,
+        };
+    }
+
+    static async toUpdate(user){
+        // en update no se cambia la clave ni la password  (para la password crear un chgpass)
+        return{
+            nombre: user.nombre,
+            idClienteERP: user.idClienteERP || "",
+            derechos: user.derechos || "0000",
         };
     }
 

@@ -3,19 +3,6 @@ import Usuarios from "../models/usuarios_model.js";
 import JWT from "../middleware/jwt_handle.js";
 
 export default class AuthService{
-    static async userRegister(user){
-        console.log("userRegister: ", user);
-        const userToAdd = await Usuarios.toAdd(user);
-        try{
-            const [rows] = await pool.query("INSERT INTO Usuarios SET ?", [userToAdd]); 
-            userToAdd.id = rows.insertId;
-            return new Usuarios(userToAdd);
-        }catch (error){
-            if (error?.code === "ER_DUP_ENTRY") dbErrorMsg(409, "El usuario ya existe");
-            dbErrorMsg(500, error?.sqlMessage);
-        } 
-    }
-
     static async userLogin(mail, pass){
         try{
             const [rows] = await pool.query("SELECT * FROM Usuarios u LEFT JOIN ClientesERP c ON u.idClienteERP = c.idClienteERP WHERE mail = ?", [mail]);
@@ -27,10 +14,41 @@ export default class AuthService{
             const user = new Usuarios(rows[0]);
             return {token: JWT.generateToken(rows[0].mail), user: user.toJson()};  // aca podria mandar un payload mayor.
         }catch(error){
-            if (error.status === 401) throw error;
-            dbErrorMsg(500, error?.sqlMessage);
+            // if (error.status === 401) throw error;
+            // dbErrorMsg(500, error?.sqlMessage);
+            dbErrorMsg(error.status || 500, error?.sqlMessage || error.message);
         }
     }
+
+    static async userRegister(user){
+        const userToAdd = await Usuarios.toAdd(user);
+        try{
+            const [rows] = await pool.query("INSERT INTO Usuarios SET ?", [userToAdd]); 
+            userToAdd.id = rows.insertId;
+            return new Usuarios(userToAdd);
+        }catch (error){
+            //mail es clave unica (ademas del id)
+            if (error?.code === "ER_DUP_ENTRY") dbErrorMsg(409, "El usuario ya existe");
+            dbErrorMsg(500, error?.sqlMessage);
+        } 
+    }
+
+    static async userUpdate(updatedUser) {
+        if (!updatedUser.mail) dbErrorMsg(400, "Debe estar el mail en el requerimiento de usuario" );
+        try {
+            const userToUpdate = await Usuarios.toUpdate(updatedUser);
+            const [result] = await pool.query("UPDATE Usuarios SET ? WHERE mail = ?", [userToUpdate, updatedUser.mail]);
+            
+            if (result.affectedRows !== 1) {
+                dbErrorMsg(404, "El usuario no existe");
+            }
+            const [rows] = await pool.query("SELECT * FROM Usuarios u LEFT JOIN ClientesERP c ON u.idClienteERP = c.idClienteERP WHERE mail = ?", [updatedUser.mail]);          
+            return new Usuarios(rows[0]);
+        } catch (error) {
+            dbErrorMsg(error.status || 500, error?.sqlMessage || error.message);
+        }
+    }
+    
 
     static async getAll() {
         try{

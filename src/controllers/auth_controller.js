@@ -23,6 +23,16 @@ export default class AuthController{
         }
     }
 
+    static async userUpdate(req, res, next) {
+        const user = req.body;   
+        try{
+            const usuario = await AuthService.userUpdate(user);
+            res.status(200).send(usuario.toJson());
+        } catch (error){
+            showError(req, res, error);
+        }
+    }
+
     static async getAll(req, res, next) {
         try {
             const usuarios = await AuthService.getAll();
