@@ -2,6 +2,12 @@ import { pool, dbErrorMsg } from "../database/db.js";
 import Usuarios from "../models/usuarios_model.js";
 import JWT from "../middleware/jwt_handle.js";
 
+const select = "SELECT u.id, u.nombre, u.mail, u.idClienteERP, u.derechos, c.empresa " + 
+               "FROM Usuarios u " + 
+               "LEFT JOIN ClientesERP c ON u.idClienteERP = c.idClienteERP " + 
+               "LEFT JOIN DireccionDefault_Retail d ON u.id = d.idUsuario " + 
+               "LEFT JOIN Roles r N u.derechos = r.derechos";
+
 export default class AuthService{
     static async userLogin(mail, pass){
         try{
@@ -42,7 +48,7 @@ export default class AuthService{
             if (result.affectedRows !== 1) {
                 dbErrorMsg(404, "El usuario no existe");
             }
-            const [rows] = await pool.query("SELECT * FROM Usuarios u LEFT JOIN ClientesERP c ON u.idClienteERP = c.idClienteERP WHERE mail = ?", [updatedUser.mail]);          
+            const [rows] = await pool.query(select + " WHERE mail = ?", [updatedUser.mail]);          
             return new Usuarios(rows[0]);
         } catch (error) {
             dbErrorMsg(error.status || 500, error?.sqlMessage || error.message);
@@ -52,7 +58,7 @@ export default class AuthService{
 
     static async getAll() {
         try{
-            const [rows] = await pool.query("SELECT u.id, u.nombre, u.mail, u.idClienteERP, u.derechos, c.empresa FROM Usuarios u LEFT JOIN ClientesERP c ON u.idClienteERP = c.idClienteERP");
+            const [rows] = await pool.query(select);
             return rows;
         }catch(error){
             dbErrorMsg(500, error?.sqlMessage);
