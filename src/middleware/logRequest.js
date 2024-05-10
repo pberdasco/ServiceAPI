@@ -1,15 +1,17 @@
 import config from "../config.js";
 
-/*
+/** 
 *  Ejemplo de un middleware de logging, 
 *     pero que puede ser cualquier cosa que quiera ejecutar 
 *     desde el router antes del controler
 *
 *  En un middleware como este podriamos contar tambien llamadas, seguridad, etc
 * Esta devolviend una funcion para que pueda recibir parametros.
+* @example
 * Se puede llamar: 
 *               casoRouter.get("/detallado", logRequest({ logLevel: "2" }), CasoController.getAll); //  toma nivel 2
 *               casoRouter.get("/detallado", logRequest(), CasoController.getAll); //toma default de variable de entorno
+* @param {{logLevel: int}} [options={}] 
 */
 export function logRequest(options = {}) {
     const defaultLogLevel = config.LOGREQUEST || "none"; // Valor predeterminado desde la configuración global
@@ -22,7 +24,8 @@ export function logRequest(options = {}) {
             const expressReq = {
                 time: new Date(),
                 methodAndUrl: `${req.method}-http://${req.hostname}:${req.socket.localPort}${req.originalUrl}`,
-                paramsAndQuery: `${req.params} - ${req.query}`,
+                params: req.params,
+                querys: req.query,
             };
 
             if (logLevel === "3") {
@@ -32,7 +35,7 @@ export function logRequest(options = {}) {
             }
 
             // Controlar si el body debe ser logueado o no
-            if ((logLevel === "2" || logLevel === "3") && req.body && req.body.length < 1000) {
+            if ((logLevel === "2" || logLevel === "3") && req.body) {
                 expressReq.body = req.body;
             }
             

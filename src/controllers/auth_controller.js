@@ -7,7 +7,7 @@ export default class AuthController{
         const user = req.body;   
         try{
             const usuario = await AuthService.userRegister(user);
-            res.status(200).send(usuario.toJson());
+            res.status(200).send(usuario.toResponse());
         } catch (error){
             showError(req, res, error);
         }
@@ -27,9 +27,19 @@ export default class AuthController{
         const user = req.body;   
         try{
             const usuario = await AuthService.userUpdate(user);
-            res.status(200).send(usuario.toJson());
+            res.status(200).send(usuario.toResponse());
         } catch (error){
             showError(req, res, error);
+        }
+    }
+
+    static async getById(req, res, next) {
+        const id = req.params.id;
+        try {
+            const usuario = await AuthService.getById(id);
+            res.status(200).send(usuario.toResponse());                  
+        } catch (error) {
+            showError(req, res, error);    
         }
     }
 

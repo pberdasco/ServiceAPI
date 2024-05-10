@@ -3,9 +3,14 @@ import jwt from "jsonwebtoken";
 import config from "../config.js";
 
 export default class JWT{
-    // en el jwt mandar datos utiles del usuario (id, email, clienteId?, algun permiso?/claim)
-    static generateToken(mail){
-        const token = jwt.sign({mail}, config.JWT_SECRET, {expiresIn: "2h"});
+    /**
+     * Genera un token para el usuario
+     * @param {object} tokenContent {id, nombre, mail, derechos}
+     * @returns {string} token
+     */
+    static generateToken({id, mail, nombre, derechos}){
+        const tokenContent = {id, mail, nombre, derechos};
+        const token = jwt.sign(tokenContent, config.JWT_SECRET, {expiresIn: "2h"});
         return token;
     }
 

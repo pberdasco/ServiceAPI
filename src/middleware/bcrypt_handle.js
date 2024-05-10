@@ -7,6 +7,7 @@ export default class Cripto{
     }
     
     static async verified(pass, passHash){
+        console.log("Verifying: ",pass, passHash);
         const isOk = await compare(pass, passHash);
         return isOk;
     }
